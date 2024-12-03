@@ -13,8 +13,7 @@ effect_callback_type = 4
 needs_motion_vectors = false
 needs_normal_roughness = false
 script = ExtResource("1_g22wf")
-shader_code = "float gray = color.r * 0.2125 + color.g * 0.7154 + color.b * 0.0721;
-color.rgb = vec3(gray);"
+exposure = 0.454
 
 [sub_resource type="Compositor" id="Compositor_4ipny"]
 compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_5gbdv")])
@@ -35,6 +34,7 @@ compositor = SubResource("Compositor_4ipny")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.01111)
+fov = 56.4
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("QuadMesh_yds3v")

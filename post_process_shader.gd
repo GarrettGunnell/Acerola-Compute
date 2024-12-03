@@ -24,19 +24,16 @@ void main() {
 	
 	vec4 color = imageLoad(color_image, uv);
 	
-	#COMPUTE_CODE
+	color *= params.reserved.x;
 	
 	imageStore(color_image, uv, color);
 }
 "
 
-@export_multiline var shader_code : String = "":
-	set(value):
-		mutex.lock()
-		shader_code = value
-		shader_is_dirty = true
-		mutex.unlock()
-		
+@export_group("Shader Settings")
+@export_range(0, 2) var exposure = 1.0
+
+
 var rd : RenderingDevice
 var shader : RID
 var pipeline : RID
@@ -62,14 +59,14 @@ func _check_shader() -> bool:
 	
 	mutex.lock()
 	if shader_is_dirty:
-		new_shader_code = shader_code
+		new_shader_code = template_shader
 		shader_is_dirty = false
 	mutex.unlock()
 
 	if new_shader_code.is_empty():
 		return pipeline.is_valid()
 		
-	new_shader_code = template_shader.replace("#COMPUTE_CODE", new_shader_code);
+	new_shader_code = template_shader
 	
 	if shader.is_valid():
 		rd.free_rid(shader)
@@ -108,7 +105,7 @@ func _render_callback(p_effect_callback_type, p_render_data):
 			var push_constant : PackedFloat32Array = PackedFloat32Array()
 			push_constant.push_back(size.x)
 			push_constant.push_back(size.y)
-			push_constant.push_back(0.0)
+			push_constant.push_back(exposure)
 			push_constant.push_back(0.0)
 			
 			var view_count = render_scene_buffers.get_view_count()
