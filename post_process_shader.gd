@@ -13,6 +13,7 @@ layout(rgba16f, set = 0, binding = 0) uniform image2D color_image;
 layout(push_constant, std430) uniform Params {
 	vec2 raster_size;
 	vec2 reserved;
+	vec4 exposure;
 } params;
 
 // main function/kernel?
@@ -24,14 +25,14 @@ void main() {
 	
 	vec4 color = imageLoad(color_image, uv);
 	
-	color *= params.reserved.x;
+	color.rgb *= params.exposure.rgb + params.reserved.x + params.reserved.y;
 	
 	imageStore(color_image, uv, color);
 }
 "
 
 @export_group("Shader Settings")
-@export_range(0, 2) var exposure = 1.0
+@export var exposure : Vector3
 
 
 var rd : RenderingDevice
@@ -105,7 +106,11 @@ func _render_callback(p_effect_callback_type, p_render_data):
 			var push_constant : PackedFloat32Array = PackedFloat32Array()
 			push_constant.push_back(size.x)
 			push_constant.push_back(size.y)
-			push_constant.push_back(exposure)
+			push_constant.push_back(0.0)
+			push_constant.push_back(0.0)
+			push_constant.push_back(exposure.x)
+			push_constant.push_back(exposure.y)
+			push_constant.push_back(exposure.z)
 			push_constant.push_back(0.0)
 			
 			var view_count = render_scene_buffers.get_view_count()

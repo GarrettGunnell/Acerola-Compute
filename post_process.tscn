@@ -5,7 +5,7 @@
 
 [sub_resource type="Environment" id="Environment_msfv3"]
 
-[sub_resource type="CompositorEffect" id="CompositorEffect_5gbdv"]
+[sub_resource type="CompositorEffect" id="CompositorEffect_6lq7a"]
 resource_local_to_scene = false
 resource_name = ""
 enabled = true
@@ -13,10 +13,10 @@ effect_callback_type = 4
 needs_motion_vectors = false
 needs_normal_roughness = false
 script = ExtResource("1_g22wf")
-exposure = 0.454
+exposure = Vector3(0, 0, 0)
 
 [sub_resource type="Compositor" id="Compositor_4ipny"]
-compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_5gbdv")])
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_6lq7a")])
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_in1jo"]
 shading_mode = 0
