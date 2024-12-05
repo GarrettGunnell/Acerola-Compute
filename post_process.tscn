@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://ccgywstxl3rj6"]
+[gd_scene load_steps=9 format=3 uid="uid://ccgywstxl3rj6"]
 
 [ext_resource type="Script" path="res://post_process_shader.gd" id="1_g22wf"]
 [ext_resource type="Texture2D" uid="uid://c6jccoq62id4d" path="res://Ignored/tumblr_280d93eb9dac421ba08746f2d5362045_8c4f7d77_1280.jpg" id="2_lxnnh"]
@@ -13,10 +13,22 @@ effect_callback_type = 4
 needs_motion_vectors = false
 needs_normal_roughness = false
 script = ExtResource("1_g22wf")
-exposure = Vector3(0, 0, 0)
+shader_file_path = "res://Shaders/color_correct.glsl"
+exposure = Vector3(2.57, 1, 1)
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_eje4o"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_g22wf")
+shader_file_path = "res://Shaders/color_correct.glsl"
+exposure = Vector3(1, 2.105, 1)
 
 [sub_resource type="Compositor" id="Compositor_4ipny"]
-compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_6lq7a")])
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_6lq7a"), SubResource("CompositorEffect_eje4o")])
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_in1jo"]
 shading_mode = 0

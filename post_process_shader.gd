@@ -2,34 +2,7 @@
 extends CompositorEffect
 class_name PostProcessShader
 
-const template_shader : String  = "#version 450
-
-// Invocations in the (x, y, z) dimension (thread group sizes)
-layout(local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
-
-layout(rgba16f, set = 0, binding = 0) uniform image2D color_image;
-
-// Our push constant (cbuffer??)
-layout(push_constant, std430) uniform Params {
-	vec2 raster_size;
-	vec2 reserved;
-	vec4 exposure;
-} params;
-
-// main function/kernel?
-void main() {
-	ivec2 uv = ivec2(gl_GlobalInvocationID.xy);
-	ivec2 size = ivec2(params.raster_size);
-	
-	if (uv.x >= size.x || uv.y >= size.y) return;
-	
-	vec4 color = imageLoad(color_image, uv);
-	
-	color.rgb *= params.exposure.rgb + params.reserved.x + params.reserved.y;
-	
-	imageStore(color_image, uv, color);
-}
-"
+@export_file("*.glsl") var shader_file_path
 
 @export_group("Shader Settings")
 @export var exposure : Vector3
@@ -58,22 +31,26 @@ func _check_shader() -> bool:
 	
 	var new_shader_code : String = ""
 	
+	var shader_file = FileAccess.open(shader_file_path, FileAccess.READ)
+	var shader_code = shader_file.get_as_text()
+	
+	
 	mutex.lock()
 	if shader_is_dirty:
-		new_shader_code = template_shader
+		new_shader_code = shader_code
 		shader_is_dirty = false
 	mutex.unlock()
 
 	if new_shader_code.is_empty():
 		return pipeline.is_valid()
-		
-	new_shader_code = template_shader
+	
+	new_shader_code = shader_code
 	
 	if shader.is_valid():
 		rd.free_rid(shader)
 		shader = RID()
 		pipeline = RID()
-		
+	
 	var shader_source : RDShaderSource = RDShaderSource.new()
 	shader_source.language = RenderingDevice.SHADER_LANGUAGE_GLSL	
 	shader_source.source_compute = new_shader_code
@@ -92,7 +69,7 @@ func _check_shader() -> bool:
 	return pipeline.is_valid()
 	
 func _render_callback(p_effect_callback_type, p_render_data):
-	if rd and p_effect_callback_type == EFFECT_CALLBACK_TYPE_POST_TRANSPARENT and _check_shader():
+	if enabled and rd and p_effect_callback_type == EFFECT_CALLBACK_TYPE_POST_TRANSPARENT and _check_shader():
 		var render_scene_buffers : RenderSceneBuffersRD = p_render_data.get_render_scene_buffers()
 		if render_scene_buffers:
 			var size = render_scene_buffers.get_internal_size()
