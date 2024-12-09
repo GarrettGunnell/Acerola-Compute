@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://ccgywstxl3rj6"]
+[gd_scene load_steps=11 format=3 uid="uid://ccgywstxl3rj6"]
 
 [ext_resource type="Script" path="res://post_process_shader.gd" id="1_g22wf"]
 [ext_resource type="Script" path="res://ImageEditor/acerola_environment.gd" id="1_gpl4s"]
 [ext_resource type="Texture2D" uid="uid://c6jccoq62id4d" path="res://Ignored/tumblr_280d93eb9dac421ba08746f2d5362045_8c4f7d77_1280.jpg" id="2_lxnnh"]
+[ext_resource type="PackedScene" uid="uid://bh0yn6ve1838v" path="res://ImageEditor/UI Nodes/Color Correction/color_correction.tscn" id="4_6dcn0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_in1jo"]
 shading_mode = 0
@@ -14,7 +15,7 @@ material = SubResource("StandardMaterial3D_in1jo")
 
 [sub_resource type="Environment" id="Environment_efpo6"]
 
-[sub_resource type="CompositorEffect" id="CompositorEffect_xrm8b"]
+[sub_resource type="CompositorEffect" id="CompositorEffect_5pplg"]
 resource_local_to_scene = false
 resource_name = ""
 enabled = true
@@ -23,21 +24,13 @@ needs_motion_vectors = false
 needs_normal_roughness = false
 script = ExtResource("1_g22wf")
 shader_file_path = "res://Shaders/color_correct.glsl"
-exposure = Vector3(2, 1, 1)
-
-[sub_resource type="CompositorEffect" id="CompositorEffect_32i1x"]
-resource_local_to_scene = false
-resource_name = ""
-enabled = true
-effect_callback_type = 4
-needs_motion_vectors = false
-needs_normal_roughness = false
-script = ExtResource("1_g22wf")
-shader_file_path = "res://Shaders/color_correct.glsl"
-exposure = Vector3(1, 3, 1)
+exposure = Vector4(1, 1, 1, 1)
 
 [sub_resource type="Compositor" id="Compositor_ykrxk"]
-compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_xrm8b"), SubResource("CompositorEffect_32i1x")])
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_5pplg")])
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nnfj2"]
+bg_color = Color(0.34, 0.34, 0.34, 1)
 
 [node name="Node3D" type="Node3D"]
 
@@ -48,7 +41,27 @@ fov = 56.4
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("QuadMesh_yds3v")
 
-[node name="AcerolaEnvironment" type="WorldEnvironment" parent="."]
+[node name="AcerolaEnvironment" type="WorldEnvironment" parent="." node_paths=PackedStringArray("colorCorrectionSettings")]
 environment = SubResource("Environment_efpo6")
 compositor = SubResource("Compositor_ykrxk")
 script = ExtResource("1_gpl4s")
+colorCorrectionSettings = NodePath("../ScrollContainer/VBoxContainer/Color Correction UI")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -284.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nnfj2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+
+[node name="Color Correction UI" parent="ScrollContainer/VBoxContainer" instance=ExtResource("4_6dcn0")]
+layout_mode = 2
+
+[node name="Color Correction UI2" parent="ScrollContainer/VBoxContainer" instance=ExtResource("4_6dcn0")]
+layout_mode = 2

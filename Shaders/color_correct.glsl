@@ -21,7 +21,7 @@ void main() {
 	
 	vec4 color = imageLoad(color_image, uv);
 	
-	color.rgb *= params.exposure.rgb + params.reserved.x + params.reserved.y;
+	color.rgb *= params.exposure.gba * params.exposure.r;
 	
 	imageStore(color_image, uv, color);
 }

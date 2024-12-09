@@ -1,0 +1,340 @@
+[gd_scene load_steps=30 format=3 uid="uid://cwa8eok4abi4c"]
+
+[ext_resource type="Script" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/folding_presets.gd" id="1_ysp51"]
+[ext_resource type="Texture2D" uid="uid://crdv3y6m67ms0" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Normal/ControlAlignTopLeft.svg" id="2_lobqh"]
+[ext_resource type="Texture2D" uid="uid://c24jayottym27" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Normal/ControlAlignCenterTop.svg" id="3_qbd0r"]
+[ext_resource type="Texture2D" uid="uid://domepwwue1sp4" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Clicked/ControlAlignTopLeft.svg" id="3_waogs"]
+[ext_resource type="Texture2D" uid="uid://mncyfyt3fogw" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Hover/ControlAlignTopLeft.svg" id="4_0e3j1"]
+[ext_resource type="Texture2D" uid="uid://o7fbw2f04ja3" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Clicked/ControlAlignCenterTop.svg" id="5_w0qwx"]
+[ext_resource type="Texture2D" uid="uid://rw3up4a251tx" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Hover/ControlAlignCenterTop.svg" id="7_w5ow3"]
+[ext_resource type="Texture2D" uid="uid://ci3ojhpr5r086" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Normal/ControlAlignCenterLeft.svg" id="8_0jc7e"]
+[ext_resource type="Texture2D" uid="uid://bmxi81k7vn8hj" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Normal/ControlAlignCenter.svg" id="9_6wmw0"]
+[ext_resource type="Texture2D" uid="uid://dftrdw2w3g6ny" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Clicked/ControlAlignCenterLeft.svg" id="9_elwu8"]
+[ext_resource type="Texture2D" uid="uid://6fwpcys854s3" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Hover/ControlAlignCenterLeft.svg" id="10_dksb4"]
+[ext_resource type="Texture2D" uid="uid://b05wj4o55hnfj" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Clicked/ControlAlignCenter.svg" id="12_xymij"]
+[ext_resource type="Texture2D" uid="uid://dus7earmqpni0" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Hover/ControlAlignCenter.svg" id="13_6ln54"]
+[ext_resource type="Texture2D" uid="uid://bvv0caighcifa" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Normal/ControlAlignBottomLeft.svg" id="14_xfjmm"]
+[ext_resource type="Texture2D" uid="uid://bdyjj37l24bfu" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Clicked/ControlAlignBottomLeft.svg" id="15_qyk2f"]
+[ext_resource type="Texture2D" uid="uid://ycroqpx34b3" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Hover/ControlAlignBottomLeft.svg" id="16_84anc"]
+[ext_resource type="Texture2D" uid="uid://dgu20vyoivwhd" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Normal/ControlAlignTopWide.svg" id="17_uaurg"]
+[ext_resource type="Texture2D" uid="uid://cuwpinjjsq6st" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Clicked/ControlAlignTopWide.svg" id="18_qq35s"]
+[ext_resource type="Texture2D" uid="uid://cv33aqd6rhsw6" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Hover/ControlAlignTopWide.svg" id="19_bu0ji"]
+[ext_resource type="Texture2D" uid="uid://doy16u8e3gyte" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Normal/ControlAlignHCenterWide.svg" id="20_hb22i"]
+[ext_resource type="Texture2D" uid="uid://kdisonq2pqmg" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Clicked/ControlAlignHCenterWide.svg" id="21_8b171"]
+[ext_resource type="Texture2D" uid="uid://bsqtr0c5kxfln" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Hover/ControlAlignHCenterWide.svg" id="22_0flqd"]
+[ext_resource type="Texture2D" uid="uid://d14a4y2w3a6kj" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Normal/ControlAlignLeftWide.svg" id="23_7f7c7"]
+[ext_resource type="Texture2D" uid="uid://fqqdb2kdffw5" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Clicked/ControlAlignLeftWide.svg" id="24_vdlak"]
+[ext_resource type="Texture2D" uid="uid://bytladrq678sl" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Hover/ControlAlignLeftWide.svg" id="25_0yhlr"]
+[ext_resource type="Texture2D" uid="uid://fuvk0u5r057e" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Normal/ControlAlignFullRect_Tips.svg" id="26_k5ymx"]
+[ext_resource type="Texture2D" uid="uid://w7ggyfcx8yjr" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Normal/ControlAlignVCenterWide.svg" id="26_p7f3l"]
+[ext_resource type="Texture2D" uid="uid://bh8p8p5c1j5jg" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Clicked/ControlAlignVCenterWide.svg" id="27_k0fxd"]
+[ext_resource type="Texture2D" uid="uid://bdr0865vc18jt" path="res://addons/collapsible_container/collapsible_elements/FoldingPresets/icons/Hover/ControlAlignVCenterWide.svg" id="28_8vmqg"]
+
+[node name="FoldingPresets" type="Control" node_paths=PackedStringArray("value_label", "top_left", "top_center", "top_right", "center_left", "center", "center_right", "bottom_left", "bottom_center", "bottom_right", "full_rect", "h_top_wide", "h_center_wide", "h_bottom_wide", "v_top_wide", "v_center_wide", "v_bottom_wide")]
+custom_minimum_size = Vector2(114, 174)
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.0
+offset_top = -87.0
+offset_right = 57.0
+offset_bottom = 87.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_ysp51")
+value_label = NodePath("Center/VBoxContainer/Value")
+top_left = NodePath("Center/VBoxContainer/GridContainer/GridContainer/TopLeft")
+top_center = NodePath("Center/VBoxContainer/GridContainer/GridContainer/TopCenter")
+top_right = NodePath("Center/VBoxContainer/GridContainer/GridContainer/TopRight")
+center_left = NodePath("Center/VBoxContainer/GridContainer/GridContainer/CenterLeft")
+center = NodePath("Center/VBoxContainer/GridContainer/GridContainer/Center")
+center_right = NodePath("Center/VBoxContainer/GridContainer/GridContainer/CenterRight")
+bottom_left = NodePath("Center/VBoxContainer/GridContainer/GridContainer/BottomLeft")
+bottom_center = NodePath("Center/VBoxContainer/GridContainer/GridContainer/BottomCenter")
+bottom_right = NodePath("Center/VBoxContainer/GridContainer/GridContainer/BottomRight")
+full_rect = NodePath("Center/VBoxContainer/GridContainer/FullRect")
+h_top_wide = NodePath("Center/VBoxContainer/GridContainer/HWide/HTopWide")
+h_center_wide = NodePath("Center/VBoxContainer/GridContainer/HWide/HCenterWide")
+h_bottom_wide = NodePath("Center/VBoxContainer/GridContainer/HWide/HBottomWide")
+v_top_wide = NodePath("Center/VBoxContainer/GridContainer/VWide/VLeftWide")
+v_center_wide = NodePath("Center/VBoxContainer/GridContainer/VWide/VCenterWide")
+v_bottom_wide = NodePath("Center/VBoxContainer/GridContainer/VWide/VRightWide")
+metadata/_edit_vertical_guides_ = []
+
+[node name="Center" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Center"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -57.0
+offset_top = -72.0
+offset_right = 57.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="Center/VBoxContainer"]
+layout_mode = 2
+text = "FoldingPresets"
+horizontal_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="Center/VBoxContainer"]
+layout_mode = 2
+columns = 3
+
+[node name="GridContainer" type="GridContainer" parent="Center/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 1
+theme_override_constants/v_separation = 1
+columns = 3
+
+[node name="TopLeft" type="TextureButton" parent="Center/VBoxContainer/GridContainer/GridContainer"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Top Left"
+toggle_mode = true
+button_pressed = true
+texture_normal = ExtResource("2_lobqh")
+texture_pressed = ExtResource("3_waogs")
+texture_hover = ExtResource("4_0e3j1")
+texture_disabled = ExtResource("3_waogs")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="TopCenter" type="TextureButton" parent="Center/VBoxContainer/GridContainer/GridContainer" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Center Top"
+toggle_mode = true
+texture_normal = ExtResource("3_qbd0r")
+texture_pressed = ExtResource("5_w0qwx")
+texture_hover = ExtResource("7_w5ow3")
+texture_disabled = ExtResource("5_w0qwx")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="TopRight" type="TextureButton" parent="Center/VBoxContainer/GridContainer/GridContainer" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Top Right"
+toggle_mode = true
+texture_normal = ExtResource("2_lobqh")
+texture_pressed = ExtResource("3_waogs")
+texture_hover = ExtResource("4_0e3j1")
+texture_disabled = ExtResource("3_waogs")
+ignore_texture_size = true
+stretch_mode = 4
+flip_h = true
+
+[node name="CenterLeft" type="TextureButton" parent="Center/VBoxContainer/GridContainer/GridContainer" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Center Left"
+toggle_mode = true
+texture_normal = ExtResource("8_0jc7e")
+texture_pressed = ExtResource("9_elwu8")
+texture_hover = ExtResource("10_dksb4")
+texture_disabled = ExtResource("9_elwu8")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Center" type="TextureButton" parent="Center/VBoxContainer/GridContainer/GridContainer" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Center"
+toggle_mode = true
+texture_normal = ExtResource("9_6wmw0")
+texture_pressed = ExtResource("12_xymij")
+texture_hover = ExtResource("13_6ln54")
+texture_disabled = ExtResource("12_xymij")
+ignore_texture_size = true
+stretch_mode = 4
+flip_h = true
+
+[node name="CenterRight" type="TextureButton" parent="Center/VBoxContainer/GridContainer/GridContainer" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Center Right"
+toggle_mode = true
+texture_normal = ExtResource("8_0jc7e")
+texture_pressed = ExtResource("9_elwu8")
+texture_hover = ExtResource("10_dksb4")
+texture_disabled = ExtResource("9_elwu8")
+ignore_texture_size = true
+stretch_mode = 4
+flip_h = true
+
+[node name="BottomLeft" type="TextureButton" parent="Center/VBoxContainer/GridContainer/GridContainer" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Bottom Left"
+toggle_mode = true
+texture_normal = ExtResource("14_xfjmm")
+texture_pressed = ExtResource("15_qyk2f")
+texture_hover = ExtResource("16_84anc")
+texture_disabled = ExtResource("15_qyk2f")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="BottomCenter" type="TextureButton" parent="Center/VBoxContainer/GridContainer/GridContainer" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Center Bottom"
+toggle_mode = true
+texture_normal = ExtResource("3_qbd0r")
+texture_pressed = ExtResource("5_w0qwx")
+texture_hover = ExtResource("7_w5ow3")
+texture_disabled = ExtResource("5_w0qwx")
+ignore_texture_size = true
+stretch_mode = 4
+flip_v = true
+
+[node name="BottomRight" type="TextureButton" parent="Center/VBoxContainer/GridContainer/GridContainer" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Bottom Right"
+toggle_mode = true
+texture_normal = ExtResource("14_xfjmm")
+texture_pressed = ExtResource("15_qyk2f")
+texture_hover = ExtResource("16_84anc")
+texture_disabled = ExtResource("15_qyk2f")
+ignore_texture_size = true
+stretch_mode = 4
+flip_h = true
+
+[node name="VSeparator" type="VSeparator" parent="Center/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, -12.845)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="HWide" type="VBoxContainer" parent="Center/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="HTopWide" type="TextureButton" parent="Center/VBoxContainer/GridContainer/HWide"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Top Wide"
+toggle_mode = true
+texture_normal = ExtResource("17_uaurg")
+texture_pressed = ExtResource("18_qq35s")
+texture_hover = ExtResource("19_bu0ji")
+texture_disabled = ExtResource("18_qq35s")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="HCenterWide" type="TextureButton" parent="Center/VBoxContainer/GridContainer/HWide" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "HCenter Wide"
+toggle_mode = true
+texture_normal = ExtResource("20_hb22i")
+texture_pressed = ExtResource("21_8b171")
+texture_hover = ExtResource("22_0flqd")
+texture_disabled = ExtResource("21_8b171")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="HBottomWide" type="TextureButton" parent="Center/VBoxContainer/GridContainer/HWide" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Bottom Wide"
+toggle_mode = true
+texture_normal = ExtResource("17_uaurg")
+texture_pressed = ExtResource("18_qq35s")
+texture_hover = ExtResource("19_bu0ji")
+texture_disabled = ExtResource("18_qq35s")
+ignore_texture_size = true
+stretch_mode = 4
+flip_v = true
+
+[node name="HSeparator" type="HSeparator" parent="Center/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, -12.845)
+layout_mode = 2
+
+[node name="HSeparator2" type="HSeparator" parent="Center/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, -12.845)
+layout_mode = 2
+
+[node name="HSeparator3" type="HSeparator" parent="Center/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, -12.845)
+layout_mode = 2
+
+[node name="VWide" type="HBoxContainer" parent="Center/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="VLeftWide" type="TextureButton" parent="Center/VBoxContainer/GridContainer/VWide"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Left Wide"
+toggle_mode = true
+texture_normal = ExtResource("23_7f7c7")
+texture_pressed = ExtResource("24_vdlak")
+texture_hover = ExtResource("25_0yhlr")
+texture_disabled = ExtResource("24_vdlak")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="VCenterWide" type="TextureButton" parent="Center/VBoxContainer/GridContainer/VWide" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "VCenter Wide"
+toggle_mode = true
+texture_normal = ExtResource("26_p7f3l")
+texture_pressed = ExtResource("27_k0fxd")
+texture_hover = ExtResource("28_8vmqg")
+texture_disabled = ExtResource("27_k0fxd")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="VRightWide" type="TextureButton" parent="Center/VBoxContainer/GridContainer/VWide" groups=["container_required"]]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "Right Wide"
+toggle_mode = true
+texture_normal = ExtResource("23_7f7c7")
+texture_pressed = ExtResource("24_vdlak")
+texture_hover = ExtResource("25_0yhlr")
+texture_disabled = ExtResource("24_vdlak")
+ignore_texture_size = true
+stretch_mode = 4
+flip_h = true
+
+[node name="VSeparator2" type="VSeparator" parent="Center/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(0, -12.845)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="FullRect" type="TextureButton" parent="Center/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+tooltip_text = "CollapsibleContainer Tips:
+For more FoldingDirections: parent to a Container (a MarginContainer is recommended). Ensure that the Container has the same minimum size as this node for the intended effect. (Copy and paste the custom_minimum_size from this inspector into the MarginContainer's custom_minimum_size!)"
+texture_normal = ExtResource("26_k5ymx")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="Value" type="Label" parent="Center/VBoxContainer"]
+layout_mode = 2
+text = "Value"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="Center/VBoxContainer/GridContainer/FullRect" to="." method="_on_full_rect_pressed"]

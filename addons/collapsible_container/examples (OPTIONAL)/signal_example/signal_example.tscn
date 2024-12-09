@@ -1,0 +1,287 @@
+[gd_scene load_steps=4 format=3 uid="uid://cnfx4s8ortj53"]
+
+[ext_resource type="Script" path="res://addons/collapsible_container/examples (OPTIONAL)/signal_example/signal_example_script.gd" id="1_teivp"]
+[ext_resource type="Script" path="res://addons/collapsible_container/collapsible_elements/collapsible_container.gd" id="2_nump6"]
+[ext_resource type="Texture2D" uid="uid://yji7vga2as48" path="res://icon.svg" id="3_lrcam"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="CollapsibleContainerExampleScript" type="Node" parent="." node_paths=PackedStringArray("collapsible", "sizing_node_1", "sizing_node_2", "state_set_label", "tween_started_label", "tween_completed_label", "tween_amount_changed_label", "tween_interrupted_label", "tween_settings_info", "custom_sizes_info", "sizing_node_info", "constraint_info", "auto_update_info", "force_size_info", "force_tween_info")]
+script = ExtResource("1_teivp")
+collapsible = NodePath("../CollapsibleContainer")
+sizing_node_1 = NodePath("../CollapsibleContainer/TextureRect")
+sizing_node_2 = NodePath("../CollapsibleContainer/TextureRect2")
+state_set_label = NodePath("../Signals/StateSet")
+tween_started_label = NodePath("../Signals/TweenStarted")
+tween_completed_label = NodePath("../Signals/TweenCompleted")
+tween_amount_changed_label = NodePath("../Signals/TweenAmountChanged")
+tween_interrupted_label = NodePath("../Signals/TweenInterrupted")
+tween_settings_info = NodePath("../Buttons/TweenSettings/Info")
+custom_sizes_info = NodePath("../Buttons/CustomSizes/Info")
+sizing_node_info = NodePath("../Buttons/Sizing Node/Info")
+constraint_info = NodePath("../Buttons/Constraint/Info")
+auto_update_info = NodePath("../Buttons/AutoUpdate/Info")
+force_size_info = NodePath("../Buttons/ForceSize/Info")
+force_tween_info = NodePath("../Buttons/ForceTween/Info")
+
+[node name="CollapsibleContainer" type="Control" parent="."]
+process_mode = 3
+editor_description = "
+			A custom/plugin Control node capable of hiding and revealing its children by folding and unfolding.
+			
+Give feedback at: https://github.com/ArshvirGoraya/Godot-Collapsible-Container"
+clip_contents = true
+custom_minimum_size = Vector2(212, 208)
+anchors_preset = 0
+offset_right = 212.0
+offset_bottom = 208.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource("2_nump6")
+starts_opened = false
+sizing_node = NodePath("TextureRect")
+custom_open_size = Vector2(269, 200)
+custom_close_size = Vector2(90, 100)
+metadata/_edit_lock_ = true
+
+[node name="TextureRect" type="TextureRect" parent="CollapsibleContainer"]
+layout_mode = 0
+offset_right = 212.0
+offset_bottom = 208.0
+texture = ExtResource("3_lrcam")
+
+[node name="TextureRect2" type="TextureRect" parent="CollapsibleContainer"]
+layout_mode = 0
+offset_right = 135.0
+offset_bottom = 131.0
+texture = ExtResource("3_lrcam")
+
+[node name="Signals" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="Signals"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.996078, 0, 0, 1)
+text = "SIGNALS: "
+horizontal_alignment = 2
+
+[node name="StateSet" type="Label" parent="Signals"]
+layout_mode = 2
+text = "State Set: 
+Previous State:"
+horizontal_alignment = 2
+
+[node name="StateChanged" type="Label" parent="Signals"]
+visible = false
+layout_mode = 2
+text = "State Changed: "
+horizontal_alignment = 2
+
+[node name="Empty space2" type="Label" parent="Signals"]
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="TweenStarted" type="Label" parent="Signals"]
+layout_mode = 2
+text = "Tween Started: "
+horizontal_alignment = 2
+
+[node name="TweenCompleted" type="Label" parent="Signals"]
+layout_mode = 2
+text = "Tween Completed: "
+horizontal_alignment = 2
+
+[node name="TweenAmountChanged" type="Label" parent="Signals"]
+layout_mode = 2
+text = "Tween Amount Changed: "
+horizontal_alignment = 2
+
+[node name="Empty space" type="Label" parent="Signals"]
+layout_mode = 2
+horizontal_alignment = 2
+
+[node name="TweenInterrupted" type="Label" parent="Signals"]
+layout_mode = 2
+text = "Tween Interrupted: "
+horizontal_alignment = 2
+
+[node name="Buttons" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -97.5
+offset_top = -120.5
+offset_right = 97.5
+offset_bottom = 120.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+
+[node name="ToggleOpen" type="Button" parent="Buttons/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Calls open_toggle() on the CollapsibleContainer"
+text = "Toggle Open/Close"
+
+[node name="ToggleTweenOpen" type="Button" parent="Buttons/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Calls open_tween_toggle() on the CollapsibleContainer"
+text = "Toggle Tweening"
+
+[node name="SetToEndTween" type="Button" parent="Buttons/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Calls set_to_end_tween() on the CollapsibleContainer"
+text = "Set To End Tween"
+
+[node name="ForceStopTween" type="Button" parent="Buttons/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "Calls force_stop_tween() on the CollapsibleContainer"
+text = "Force Stop Tween"
+
+[node name="TweenSettings" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+
+[node name="ToggleTweenSettings" type="Button" parent="Buttons/TweenSettings"]
+custom_minimum_size = Vector2(200, 78)
+layout_mode = 2
+tooltip_text = "Changes the tween settings between 2 selections."
+text = "Toggle Tween Settings"
+
+[node name="Info" type="Label" parent="Buttons/TweenSettings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "TRANS_SIZE
+EASE_OUT
+duration = 0.5"
+vertical_alignment = 1
+
+[node name="CustomSizes" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+
+[node name="ToggleCustomSizes" type="Button" parent="Buttons/CustomSizes"]
+custom_minimum_size = Vector2(200, 78)
+layout_mode = 2
+tooltip_text = "Sets custom open and close sizes if toggled on. 
+If toggled off, sets use_custom_open_size and use_custom_close_size to false."
+text = "Toggle Custom Sizes"
+
+[node name="Info" type="Label" parent="Buttons/CustomSizes"]
+custom_minimum_size = Vector2(183, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "false"
+vertical_alignment = 1
+
+[node name="Sizing Node" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+
+[node name="ToggleSizingNode" type="Button" parent="Buttons/Sizing Node"]
+custom_minimum_size = Vector2(200, 78)
+layout_mode = 2
+tooltip_text = "Changes sizing_node between 2 options."
+text = "Toggle Sizing Node"
+
+[node name="Info" type="Label" parent="Buttons/Sizing Node"]
+custom_minimum_size = Vector2(183, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "TextureRect"
+vertical_alignment = 1
+
+[node name="Constraint" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+
+[node name="ToggleConstraint" type="Button" parent="Buttons/Constraint"]
+custom_minimum_size = Vector2(200, 78)
+layout_mode = 2
+tooltip_text = "Toggles the collapsible between the 3 different SizingConstraintOptions options: BOTH, ONLY_WIDTH AND ONLY_HEIGHT."
+text = "Toggle Constraint"
+
+[node name="Info" type="Label" parent="Buttons/Constraint"]
+custom_minimum_size = Vector2(183, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "BOTH"
+vertical_alignment = 1
+
+[node name="AutoUpdate" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+
+[node name="ToggleAutoSizeUpdate" type="Button" parent="Buttons/AutoUpdate"]
+custom_minimum_size = Vector2(200, 78)
+layout_mode = 2
+tooltip_text = "Toggles the collapsible between the 3 different AutoUpdateSizeOptions options: DISABLED, WITH_TWEEN AND WITHOUT_TWEEN."
+text = "Toggle Auto Size Update"
+
+[node name="Info" type="Label" parent="Buttons/AutoUpdate"]
+custom_minimum_size = Vector2(183, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "WITHOUT_TWEEN"
+vertical_alignment = 1
+
+[node name="ForceSize" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+
+[node name="ToggleForceSize" type="Button" parent="Buttons/ForceSize"]
+custom_minimum_size = Vector2(200, 78)
+layout_mode = 2
+tooltip_text = "Toggles between 2 different sizes and forcibly sets the collapsible's size to selected."
+text = "Toggle Force Size"
+
+[node name="Info" type="Label" parent="Buttons/ForceSize"]
+custom_minimum_size = Vector2(183, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "false"
+vertical_alignment = 1
+
+[node name="ForceTween" type="HBoxContainer" parent="Buttons"]
+layout_mode = 2
+
+[node name="ToggleForceTween" type="Button" parent="Buttons/ForceTween"]
+custom_minimum_size = Vector2(200, 78)
+layout_mode = 2
+tooltip_text = "Toggles between 2 different sizes and forcibly tweens the collapsible's size to selected."
+text = "Toggle Force Tween"
+
+[node name="Info" type="Label" parent="Buttons/ForceTween"]
+custom_minimum_size = Vector2(183, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "false"
+vertical_alignment = 1
+
+[connection signal="state_set" from="CollapsibleContainer" to="CollapsibleContainerExampleScript" method="state_set"]
+[connection signal="tween_completed" from="CollapsibleContainer" to="CollapsibleContainerExampleScript" method="tween_completed"]
+[connection signal="tween_interrupted" from="CollapsibleContainer" to="CollapsibleContainerExampleScript" method="tween_interrupted"]
+[connection signal="tween_started" from="CollapsibleContainer" to="CollapsibleContainerExampleScript" method="tween_started"]
+[connection signal="tweening_amount_changed" from="CollapsibleContainer" to="CollapsibleContainerExampleScript" method="tween_amount_changed"]
+[connection signal="pressed" from="Buttons/HBoxContainer/ToggleOpen" to="CollapsibleContainerExampleScript" method="toggle_open"]
+[connection signal="pressed" from="Buttons/HBoxContainer/ToggleTweenOpen" to="CollapsibleContainerExampleScript" method="toggle_tweening"]
+[connection signal="pressed" from="Buttons/HBoxContainer/SetToEndTween" to="CollapsibleContainerExampleScript" method="set_to_end_tween"]
+[connection signal="pressed" from="Buttons/HBoxContainer/ForceStopTween" to="CollapsibleContainerExampleScript" method="force_stop_tween"]
+[connection signal="pressed" from="Buttons/TweenSettings/ToggleTweenSettings" to="CollapsibleContainerExampleScript" method="toggle_tween_settings"]
+[connection signal="pressed" from="Buttons/CustomSizes/ToggleCustomSizes" to="CollapsibleContainerExampleScript" method="toggle_custom_sizes"]
+[connection signal="pressed" from="Buttons/Sizing Node/ToggleSizingNode" to="CollapsibleContainerExampleScript" method="toggle_sizing_node"]
+[connection signal="pressed" from="Buttons/Constraint/ToggleConstraint" to="CollapsibleContainerExampleScript" method="toggle_constraint"]
+[connection signal="pressed" from="Buttons/AutoUpdate/ToggleAutoSizeUpdate" to="CollapsibleContainerExampleScript" method="toggle_auto_size_update"]
+[connection signal="pressed" from="Buttons/ForceSize/ToggleForceSize" to="CollapsibleContainerExampleScript" method="toggle_force_size"]
+[connection signal="pressed" from="Buttons/ForceTween/ToggleForceTween" to="CollapsibleContainerExampleScript" method="toggle_force_tween"]

@@ -5,7 +5,7 @@ class_name PostProcessShader
 @export_file("*.glsl") var shader_file_path
 
 @export_group("Shader Settings")
-@export var exposure : Vector3
+@export var exposure : Vector4
 
 
 var rd : RenderingDevice
@@ -88,7 +88,7 @@ func _render_callback(p_effect_callback_type, p_render_data):
 			push_constant.push_back(exposure.x)
 			push_constant.push_back(exposure.y)
 			push_constant.push_back(exposure.z)
-			push_constant.push_back(0.0)
+			push_constant.push_back(exposure.w)
 			
 			var view_count = render_scene_buffers.get_view_count()
 			for view in range(view_count):

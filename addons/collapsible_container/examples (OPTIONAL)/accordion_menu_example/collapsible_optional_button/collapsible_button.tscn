@@ -1,0 +1,105 @@
+[gd_scene load_steps=2 format=3 uid="uid://dqm8hk0rif0jg"]
+
+[ext_resource type="Script" path="res://addons/collapsible_container/examples (OPTIONAL)/accordion_menu_example/collapsible_optional_button/collapsible_button.gd" id="1_ag2g8"]
+
+[node name="CollapsibleButton" type="Button"]
+editor_description = "Button which can use BBCode.
+Reference for Godot's BBCode: https://docs.godotengine.org/en/stable/tutorials/ui/bbcode_in_richtextlabel.html#reference
+Text Effects: https://docs.godotengine.org/en/stable/tutorials/ui/bbcode_in_richtextlabel.html#text-effects"
+offset_right = 165.0
+offset_bottom = 31.0
+theme_override_colors/font_color = Color(0, 0, 0, 0)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 0)
+theme_override_colors/font_hover_color = Color(0, 0, 0, 0)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 0)
+theme_override_colors/font_hover_pressed_color = Color(0, 0, 0, 0)
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
+theme_override_colors/icon_normal_color = Color(0, 0, 0, 0)
+theme_override_colors/icon_pressed_color = Color(0, 0, 0, 0)
+theme_override_colors/icon_hover_color = Color(0, 0, 0, 0)
+theme_override_colors/icon_hover_pressed_color = Color(0, 0, 0, 0)
+theme_override_colors/icon_focus_color = Color(0, 0, 0, 0)
+theme_override_colors/icon_disabled_color = Color(0, 0, 0, 0)
+text = "  Accordion Button> "
+script = ExtResource("1_ag2g8")
+rotator_pivot = Vector2(-3.66, 0)
+rotator_position = Vector2(4.845, 12.22)
+text_label = "  [wave amp=50.0 freq=3.5 connected=1][rainbow freq=0.1 sat=0.3 val=0.8]Accordion Button"
+symbol_label = "[rainbow freq=0.1 sat=0.3 val=0.8]> "
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Text" type="RichTextLabel" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+mouse_filter = 2
+bbcode_enabled = true
+text = "[wave amp=50.0 freq=3.5 connected=1][rainbow freq=0.1 sat=0.3 val=0.8]Accordion Button"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="SymbolSize" type="Control" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(14, 23)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 2
+
+[node name="Rotator" type="Control" parent="MarginContainer/HBoxContainer/SymbolSize"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 4.845
+offset_top = 0.72
+offset_right = 4.845
+offset_bottom = 0.72
+grow_vertical = 2
+pivot_offset = Vector2(-3.66, 0)
+mouse_filter = 2
+
+[node name="Symbol" type="RichTextLabel" parent="MarginContainer/HBoxContainer/SymbolSize/Rotator"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -7.0
+offset_top = -11.5
+offset_right = 7.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+text = "[rainbow freq=0.1 sat=0.3 val=0.8]> "
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+shortcut_keys_enabled = false
+
+[node name="RotatorPivotOffsetGizmo" type="Marker2D" parent="MarginContainer/HBoxContainer/SymbolSize/Rotator"]
+position = Vector2(-3.66, 0)
+
+[node name="OpenRotPreviewTimer" type="Timer" parent="."]
+wait_time = 0.5
