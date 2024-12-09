@@ -7,8 +7,6 @@ var exposure : Vector4 = Vector4(1, 1, 1, 1)
 
 func _ready() -> void:
 	exposureSliders = find_children("LineEdit", "", true, true)
-	for i in exposureSliders:
-		print(i)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
