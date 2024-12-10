@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cm55eusukipw2"
+path="res://.godot/imported/color_correct.glsl-d69d7bb60e6251ba7ba84d94f8ab8cad.res"
+
+[deps]
+
+source_file="res://Shaders/Color Correction/color_correct.glsl"
+dest_files=["res://.godot/imported/color_correct.glsl-d69d7bb60e6251ba7ba84d94f8ab8cad.res"]
+
+[params]
+

@@ -6,6 +6,22 @@ class_name AcerolaEnvironment
 
 @export var effects_list : VBoxContainer
 
+func instantiate_shader_pipeline_from_effect(effect) -> CompositorEffect:
+	if effect is ColorCorrectionUI:
+		var color_correction_shader = ColorCorrectionCompositorEffect.new()
+		color_correction_shader.exposure = effect.get_exposure()
+
+		return color_correction_shader
+	elif effect is GammaCorrectionUI:
+		var gamma_correction_shader = GammaCompositorEffect.new()
+		gamma_correction_shader.gamma = effect.get_gamma()
+
+		return gamma_correction_shader
+
+	return null
+	
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_MAXIMIZED)
@@ -14,15 +30,11 @@ func _ready() -> void:
 
 	var effects_set = effects_list.get_children()
 
-	var compositorEffects : Array = Array()
+	var compositor_effects : Array = Array()
 	for effect in effects_set:
-		var exposureShader = PostProcessShader.new()
-		exposureShader.shader_file_path = "res://Shaders/color_correct.glsl"
-		exposureShader.exposure = effect.get_exposure()
+		compositor_effects.push_back(instantiate_shader_pipeline_from_effect(effect))
 
-		compositorEffects.push_back(exposureShader)
-
-	compositor.set_compositor_effects(compositorEffects)
+	compositor.set_compositor_effects(compositor_effects)
 	compositor.notify_property_list_changed()
 
 
@@ -32,23 +44,9 @@ func _process(delta: float) -> void:
 
 	var effects_set = effects_list.get_children()
 
-	var compositorEffects : Array = Array()
+	var compositor_effects : Array = Array()
 	for effect in effects_set:
-		var exposureShader = PostProcessShader.new()
-		exposureShader.shader_file_path = "res://Shaders/color_correct.glsl"
-		if effect is ColorCorrectionUI:
-			exposureShader.exposure = effect.get_exposure()
-		else:
-			exposureShader.exposure = Vector4(1, 1, 1, 1)
-			exposureShader.exposure.x = effect.get_gamma()
-			print(effect.get_gamma())
+		compositor_effects.push_back(instantiate_shader_pipeline_from_effect(effect))
 
-		compositorEffects.push_back(exposureShader)
-
-	compositor.set_compositor_effects(compositorEffects)
+	compositor.set_compositor_effects(compositor_effects)
 	compositor.notify_property_list_changed()
-
-	if reload:
-		_ready()
-		reload = false
-		notify_property_list_changed()

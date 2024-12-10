@@ -17,7 +17,7 @@ void main() {
 	
 	vec4 color = imageLoad(color_image, uv);
 	
-	color.rgb = pow(color.rgb, params.reserved.x);
+	color.rgb = pow(color.rgb, vec3(params.reserved.x));
 	
 	imageStore(color_image, uv, color);
 }
