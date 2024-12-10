@@ -1,7 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://ccgywstxl3rj6"]
+[gd_scene load_steps=13 format=3 uid="uid://ccgywstxl3rj6"]
 
+[ext_resource type="Script" path="res://post_process_shader.gd" id="1_g22wf"]
 [ext_resource type="Script" path="res://ImageEditor/acerola_environment.gd" id="1_gpl4s"]
 [ext_resource type="Texture2D" uid="uid://c6jccoq62id4d" path="res://Ignored/tumblr_280d93eb9dac421ba08746f2d5362045_8c4f7d77_1280.jpg" id="2_lxnnh"]
+[ext_resource type="PackedScene" uid="uid://bh0yn6ve1838v" path="res://ImageEditor/UI Nodes/Color Correction/acerola_color_correction_ui_node.tscn" id="4_6dcn0"]
 [ext_resource type="Script" path="res://ImageEditor/acerola_add_effect_button.gd" id="5_n5t6u"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nnfj2"]
@@ -24,7 +26,19 @@ material = SubResource("StandardMaterial3D_in1jo")
 
 [sub_resource type="Environment" id="Environment_efpo6"]
 
+[sub_resource type="CompositorEffect" id="CompositorEffect_iifrj"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_g22wf")
+shader_file_path = "res://Shaders/color_correct.glsl"
+exposure = Vector4(1, 1, 1, 1)
+
 [sub_resource type="Compositor" id="Compositor_ykrxk"]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_iifrj")])
 
 [node name="Node3D" type="Node3D"]
 
@@ -47,12 +61,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 0
 
+[node name="Color Correction UI" parent="Scroll/Sidebar/Effects List" instance=ExtResource("4_6dcn0")]
+layout_mode = 2
+
 [node name="MarginContainer" type="MarginContainer" parent="Scroll/Sidebar"]
 layout_mode = 2
-theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 5
 
 [node name="Add Effect Background" type="PanelContainer" parent="Scroll/Sidebar/MarginContainer"]
 layout_mode = 2
@@ -62,10 +76,8 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_vondc")
 layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "ADD"
-item_count = 2
-popup/item_0/text = "Color Correct"
-popup/item_1/text = "Gamma Correct"
-popup/item_1/id = 1
+item_count = 1
+popup/item_0/text = "Color Correction"
 script = ExtResource("5_n5t6u")
 effects_list = NodePath("../../../Effects List")
 

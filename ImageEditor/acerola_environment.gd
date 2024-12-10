@@ -36,7 +36,12 @@ func _process(delta: float) -> void:
 	for effect in effects_set:
 		var exposureShader = PostProcessShader.new()
 		exposureShader.shader_file_path = "res://Shaders/color_correct.glsl"
-		exposureShader.exposure = effect.get_exposure()
+		if effect is ColorCorrectionUI:
+			exposureShader.exposure = effect.get_exposure()
+		else:
+			exposureShader.exposure = Vector4(1, 1, 1, 1)
+			exposureShader.exposure.x = effect.get_gamma()
+			print(effect.get_gamma())
 
 		compositorEffects.push_back(exposureShader)
 

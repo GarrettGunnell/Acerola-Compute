@@ -1,0 +1,150 @@
+[gd_scene load_steps=13 format=3 uid="uid://cgai4nc4hucxe"]
+
+[ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_ui_header.gd" id="1_jgtrp"]
+[ext_resource type="Script" path="res://ImageEditor/UI Nodes/Gamma Correction/acerola_gamma_correction_ui_node.gd" id="1_ofexk"]
+[ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_dropdown_icon.gd" id="2_hg7xm"]
+[ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_close_button.gd" id="3_ys8ov"]
+[ext_resource type="Script" path="res://addons/collapsible_container/collapsible_elements/collapsible_container.gd" id="4_k8xlp"]
+[ext_resource type="Script" path="res://ImageEditor/UI Nodes/Gamma Correction/acerola_gamma_settings.gd" id="5_ib0cy"]
+[ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_line_edit.gd" id="6_kcm5u"]
+[ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_h_slider.gd" id="7_rushc"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_cpwaj"]
+font_size = 31
+
+[sub_resource type="LabelSettings" id="LabelSettings_omxvs"]
+font_size = 24
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y3aik"]
+bg_color = Color(0.4, 0.112, 0.112, 1)
+corner_radius_top_right = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fb4h"]
+bg_color = Color(0.6, 0.168, 0.168, 1)
+corner_radius_top_right = 5
+
+[node name="Gamma Correction UI" type="VBoxContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_ofexk")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Effect Name" type="PanelContainer" parent="PanelContainer/VBoxContainer/Header" node_paths=PackedStringArray("collapsibleContainer")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 7.35
+mouse_default_cursor_shape = 2
+script = ExtResource("1_jgtrp")
+collapsibleContainer = NodePath("../../MarginContainer/CollapsibleContainer")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/Header/Effect Name"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label2" type="Label" parent="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.25
+text = "v"
+label_settings = SubResource("LabelSettings_cpwaj")
+horizontal_alignment = 1
+script = ExtResource("2_hg7xm")
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Gamma"
+label_settings = SubResource("LabelSettings_omxvs")
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="PanelContainer/VBoxContainer/Header" node_paths=PackedStringArray("root")]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.17
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 30
+theme_override_styles/hover = SubResource("StyleBoxFlat_y3aik")
+theme_override_styles/normal = SubResource("StyleBoxFlat_5fb4h")
+text = "X"
+script = ExtResource("3_ys8ov")
+root = NodePath("../../../..")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+
+[node name="CollapsibleContainer" type="Control" parent="PanelContainer/VBoxContainer/MarginContainer"]
+process_mode = 3
+editor_description = "
+			A custom/plugin Control node capable of hiding and revealing its children by folding and unfolding.
+			
+Give feedback at: https://github.com/ArshvirGoraya/Godot-Collapsible-Container"
+clip_contents = true
+custom_minimum_size = Vector2(271, 31)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+script = ExtResource("4_k8xlp")
+folding_direction_preset = 10
+sizing_constraint = 1
+sizing_node = NodePath("Gamma Settings")
+
+[node name="Gamma Settings" type="VBoxContainer" parent="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Gamma Settings" type="VBoxContainer" parent="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings"]
+layout_mode = 2
+theme_override_constants/separation = 6
+script = ExtResource("5_ib0cy")
+
+[node name="Exposure Slider" type="MarginContainer" parent="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings"]
+layout_direction = 2
+layout_mode = 2
+theme_override_constants/margin_right = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings/Exposure Slider"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings/Exposure Slider/HBoxContainer"]
+layout_mode = 2
+text = "1.0"
+alignment = 1
+flat = true
+select_all_on_focus = true
+script = ExtResource("6_kcm5u")
+
+[node name="HSlider" type="HSlider" parent="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings/Exposure Slider/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+mouse_default_cursor_shape = 2
+max_value = 3.0
+step = 0.01
+value = 1.0
+script = ExtResource("7_rushc")
+
+[connection signal="gui_input" from="PanelContainer/VBoxContainer/Header/Effect Name" to="PanelContainer/VBoxContainer/Header/Effect Name" method="_on_gui_input"]
+[connection signal="gui_input" from="PanelContainer/VBoxContainer/Header/Effect Name" to="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer/Label2" method="_on_panel_container_gui_input"]
+[connection signal="gui_input" from="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer" to="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer" method="_on_gui_input"]
+[connection signal="state_set" from="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer" to="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer/Label2" method="_on_collapsible_container_state_set"]
+[connection signal="focus_exited" from="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings/Exposure Slider/HBoxContainer/LineEdit" to="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings/Exposure Slider/HBoxContainer/LineEdit" method="_on_focus_exited"]
+[connection signal="text_submitted" from="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings/Exposure Slider/HBoxContainer/LineEdit" to="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings/Exposure Slider/HBoxContainer/LineEdit" method="_on_text_submitted"]
+[connection signal="text_submitted" from="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings/Exposure Slider/HBoxContainer/LineEdit" to="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings/Exposure Slider/HBoxContainer/HSlider" method="_on_line_edit_text_submitted"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings/Exposure Slider/HBoxContainer/HSlider" to="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Gamma Settings/Gamma Settings/Exposure Slider/HBoxContainer/LineEdit" method="_on_h_slider_value_changed"]
