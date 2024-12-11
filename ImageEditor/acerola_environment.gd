@@ -7,12 +7,12 @@ class_name AcerolaEnvironment
 @export var effects_list : VBoxContainer
 
 func instantiate_shader_pipeline_from_effect(effect) -> CompositorEffect:
-	if effect is ColorCorrectionUI:
+	if effect is ColorCorrectionUI and effect.is_enabled():
 		var color_correction_shader = ColorCorrectionCompositorEffect.new()
 		color_correction_shader.exposure = effect.get_exposure()
 
 		return color_correction_shader
-	elif effect is GammaCorrectionUI:
+	elif effect is GammaCorrectionUI and effect.is_enabled():
 		var gamma_correction_shader = GammaCompositorEffect.new()
 		gamma_correction_shader.gamma = effect.get_gamma()
 

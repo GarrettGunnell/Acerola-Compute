@@ -1,16 +1,17 @@
-[gd_scene load_steps=14 format=3 uid="uid://bh0yn6ve1838v"]
+[gd_scene load_steps=15 format=3 uid="uid://bh0yn6ve1838v"]
 
 [ext_resource type="Script" path="res://ImageEditor/UI Nodes/Color Correction/acerola_color_correction_ui_node.gd" id="1_i7syw"]
 [ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_ui_header.gd" id="2_pdpok"]
-[ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_dropdown_icon.gd" id="3_0514x"]
+[ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_up_button.gd" id="3_vlm53"]
+[ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_down_button.gd" id="4_erguo"]
 [ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_close_button.gd" id="4_u3gwo"]
 [ext_resource type="Script" path="res://addons/collapsible_container/collapsible_elements/collapsible_container.gd" id="5_41rhe"]
 [ext_resource type="Script" path="res://ImageEditor/UI Nodes/Color Correction/exposure_settings.gd" id="6_if7po"]
 [ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_line_edit.gd" id="7_pi6xk"]
 [ext_resource type="Script" path="res://ImageEditor/UI Nodes/Generic UI Behavior Scripts/acerola_h_slider.gd" id="8_li2ug"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_7mw8k"]
-font_size = 31
+[sub_resource type="Theme" id="Theme_xrw46"]
+default_font_size = 18
 
 [sub_resource type="LabelSettings" id="LabelSettings_sre44"]
 font_size = 24
@@ -59,14 +60,26 @@ layout_mode = 2
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Label2" type="Label" parent="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 0.25
+size_flags_stretch_ratio = 0.17
+theme_override_constants/separation = 0
+
+[node name="Move Up" type="Button" parent="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer/VBoxContainer" node_paths=PackedStringArray("root")]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_xrw46")
+text = "^"
+script = ExtResource("3_vlm53")
+root = NodePath("../../../../../../..")
+
+[node name="Move Down" type="Button" parent="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer/VBoxContainer" node_paths=PackedStringArray("root")]
+layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "v"
-label_settings = SubResource("LabelSettings_7mw8k")
-horizontal_alignment = 1
-script = ExtResource("3_0514x")
+script = ExtResource("4_erguo")
+root = NodePath("../../../../../../..")
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer"]
 layout_mode = 2
@@ -237,10 +250,9 @@ step = 0.01
 value = 1.0
 script = ExtResource("8_li2ug")
 
+[connection signal="gui_input" from="PanelContainer/VBoxContainer/Header/Effect Name" to="." method="_on_effect_name_gui_input"]
 [connection signal="gui_input" from="PanelContainer/VBoxContainer/Header/Effect Name" to="PanelContainer/VBoxContainer/Header/Effect Name" method="_on_gui_input"]
-[connection signal="gui_input" from="PanelContainer/VBoxContainer/Header/Effect Name" to="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer/Label2" method="_on_panel_container_gui_input"]
 [connection signal="gui_input" from="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer" to="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer" method="_on_gui_input"]
-[connection signal="state_set" from="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer" to="PanelContainer/VBoxContainer/Header/Effect Name/HBoxContainer/Label2" method="_on_collapsible_container_state_set"]
 [connection signal="focus_exited" from="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Color Correction Settings/Exposure Settings/Exposure Slider/HBoxContainer/LineEdit" to="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Color Correction Settings/Exposure Settings/Exposure Slider/HBoxContainer/LineEdit" method="_on_focus_exited"]
 [connection signal="text_submitted" from="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Color Correction Settings/Exposure Settings/Exposure Slider/HBoxContainer/LineEdit" to="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Color Correction Settings/Exposure Settings/Exposure Slider/HBoxContainer/LineEdit" method="_on_text_submitted"]
 [connection signal="text_submitted" from="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Color Correction Settings/Exposure Settings/Exposure Slider/HBoxContainer/LineEdit" to="PanelContainer/VBoxContainer/MarginContainer/CollapsibleContainer/Color Correction Settings/Exposure Settings/Exposure Slider/HBoxContainer/HSlider" method="_on_line_edit_text_submitted"]
