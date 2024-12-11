@@ -9,3 +9,4 @@
 icon.svg*
 project.godot
 *.tmp
+*.import
