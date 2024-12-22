@@ -2,8 +2,6 @@
 extends CompositorEffect
 class_name GammaCompositorEffect
 
-var shader_file_path = "res://Shaders/Gamma Correction/gamma_correct.glsl"
-
 @export_group("Shader Settings")
 @export var gamma : float = 1.0
 
@@ -12,40 +10,16 @@ var rd : RenderingDevice
 var shader : RID
 var pipeline : RID
 
-func _init():
+func _init(shader_rid):
 	effect_callback_type = EFFECT_CALLBACK_TYPE_POST_TRANSPARENT
 	rd = RenderingServer.get_rendering_device()
-
-	if not rd: 
-		return
 	
-	var shader_code = FileAccess.open(shader_file_path, FileAccess.READ).get_as_text()
-
-	shader = RID()
-	pipeline = RID()
-
-	var shader_source : RDShaderSource = RDShaderSource.new()
-	shader_source.language = RenderingDevice.SHADER_LANGUAGE_GLSL
-	shader_source.source_compute = shader_code
-	var shader_spirv : RDShaderSPIRV = rd.shader_compile_spirv_from_source(shader_source)
-
-	if shader_spirv.compile_error_compute != "":
-		push_error(shader_spirv.compile_error_compute)
-		push_error("In: " + shader_code)
-		return
-		
-	shader = rd.shader_create_from_spirv(shader_spirv)
-	if not shader.is_valid():
-		return
-		
+	shader = shader_rid
 	pipeline = rd.compute_pipeline_create(shader)
 
-
-	
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
-		if shader.is_valid():
-			rd.free_rid(shader)
+		rd.free_rid(pipeline)
 
 	
 func _render_callback(p_effect_callback_type, p_render_data):
