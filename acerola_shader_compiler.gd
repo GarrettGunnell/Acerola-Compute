@@ -162,7 +162,7 @@ func compile_compute_shader(compute_shader_file_path) -> void:
 
 		if shader_spirv.compile_error_compute != "":
 			push_error(shader_spirv.compile_error_compute)
-			push_error("In: " + shader_code)
+			push_error("In: " + shader_code_string)
 			return
 			
 		print("Compiling Kernel: " + kernel_name)
