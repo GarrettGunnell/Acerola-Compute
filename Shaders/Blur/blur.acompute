@@ -4,6 +4,13 @@
 
 layout(rgba16f, set = 0, binding = 0) uniform image2D colorImage;
 
+layout(binding = 1) uniform UniformBufferObject {
+	int _KernelSize;
+    int _Kernel2;
+    int _Kernel3;
+    int _Kernel4;
+};
+
 layout(push_constant, std430) uniform Params {
 	vec2 raster_size;
 };
@@ -25,7 +32,7 @@ void HorizontalBlur() {
 	
 	if (uv.x >= size.x || uv.y >= size.y) return;
 	
-    vec3 color = linearBlur(uv, 10, ivec2(1, 0));
+    vec3 color = linearBlur(uv, _Kernel3, ivec2(1, 0));
 	
 	imageStore(colorImage, uv, vec4(color, 1.0));
 }
@@ -37,7 +44,7 @@ void VerticalBlur() {
 	
 	if (uv.x >= size.x || uv.y >= size.y) return;
 
-    vec3 color = linearBlur(uv, 10, ivec2(0, 1));
+    vec3 color = linearBlur(uv, _Kernel3, ivec2(0, 1));
 	
 	imageStore(colorImage, uv, vec4(color, 1.0));
 }

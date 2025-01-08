@@ -11,7 +11,7 @@ var horizontalBlurShader : RID
 var verticalBlurShader : RID
 var horizontalPipeline : RID
 var verticalPipeline : RID
-var uniformSet : RID
+var uniformBuffer : RID
 
 func _init():
 	effect_callback_type = EFFECT_CALLBACK_TYPE_POST_TRANSPARENT
@@ -22,10 +22,15 @@ func _init():
 	verticalBlurShader = AcerolaShaderCompiler.get_compute_kernel_compilation('blur', 1)
 	verticalPipeline = rd.compute_pipeline_create(verticalBlurShader)
 
+	var byte_array = PackedInt32Array([10, 3, 5, 7]).to_byte_array()
+
+	uniformBuffer = rd.uniform_buffer_create(byte_array.size(), byte_array)
+
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
 		rd.free_rid(horizontalPipeline)
 		rd.free_rid(verticalPipeline)
+		rd.free_rid(uniformBuffer)
 	
 func _render_callback(p_effect_callback_type, p_render_data):
 	if enabled and rd and p_effect_callback_type == EFFECT_CALLBACK_TYPE_POST_TRANSPARENT and horizontalPipeline.is_valid():
@@ -63,7 +68,12 @@ func _render_callback(p_effect_callback_type, p_render_data):
 				currentFrame.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
 				currentFrame.binding = 0
 				currentFrame.add_id(input_image)
-				var uniform_set = UniformSetCacheRD.get_cache(horizontalBlurShader, 0, [currentFrame])
+
+				var uniformBuffer1 : RDUniform = RDUniform.new()
+				uniformBuffer1.uniform_type = RenderingDevice.UNIFORM_TYPE_UNIFORM_BUFFER
+				uniformBuffer1.binding = 1
+				uniformBuffer1.add_id(uniformBuffer)
+				var uniform_set = UniformSetCacheRD.get_cache(horizontalBlurShader, 0, [currentFrame, uniformBuffer1])
 				
 				var compute_list := rd.compute_list_begin()
 				rd.compute_list_bind_compute_pipeline(compute_list, horizontalPipeline)
