@@ -3,7 +3,7 @@ extends CompositorEffect
 class_name BlurCompositorEffect
 
 @export_group("Shader Settings")
-@export var gamma : float = 1.0
+@export var kernel_size : int = 1
 
 
 var rd : RenderingDevice
@@ -11,7 +11,6 @@ var horizontalBlurShader : RID
 var verticalBlurShader : RID
 var horizontalPipeline : RID
 var verticalPipeline : RID
-var uniformBuffer : RID
 
 func _init():
 	effect_callback_type = EFFECT_CALLBACK_TYPE_POST_TRANSPARENT
@@ -22,15 +21,10 @@ func _init():
 	verticalBlurShader = AcerolaShaderCompiler.get_compute_kernel_compilation('blur', 1)
 	verticalPipeline = rd.compute_pipeline_create(verticalBlurShader)
 
-	var byte_array = PackedInt32Array([10, 3, 5, 7]).to_byte_array()
-
-	uniformBuffer = rd.uniform_buffer_create(byte_array.size(), byte_array)
-
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
 		rd.free_rid(horizontalPipeline)
 		rd.free_rid(verticalPipeline)
-		rd.free_rid(uniformBuffer)
 	
 func _render_callback(p_effect_callback_type, p_render_data):
 	if enabled and rd and p_effect_callback_type == EFFECT_CALLBACK_TYPE_POST_TRANSPARENT and horizontalPipeline.is_valid():
@@ -57,7 +51,7 @@ func _render_callback(p_effect_callback_type, p_render_data):
 			var push_constant : PackedFloat32Array = PackedFloat32Array()
 			push_constant.push_back(size.x)
 			push_constant.push_back(size.y)
-			push_constant.push_back(gamma)
+			push_constant.push_back(0.0)
 			push_constant.push_back(0.0)
 			
 			var view_count = render_scene_buffers.get_view_count()
@@ -69,11 +63,16 @@ func _render_callback(p_effect_callback_type, p_render_data):
 				currentFrame.binding = 0
 				currentFrame.add_id(input_image)
 
-				var uniformBuffer1 : RDUniform = RDUniform.new()
-				uniformBuffer1.uniform_type = RenderingDevice.UNIFORM_TYPE_UNIFORM_BUFFER
-				uniformBuffer1.binding = 1
-				uniformBuffer1.add_id(uniformBuffer)
-				var uniform_set = UniformSetCacheRD.get_cache(horizontalBlurShader, 0, [currentFrame, uniformBuffer1])
+				
+				var byte_array = PackedInt32Array([kernel_size, 3, 5, 7]).to_byte_array()
+
+				var uniform_buffer = rd.uniform_buffer_create(byte_array.size(), byte_array)
+
+				var uniformBuffer : RDUniform = RDUniform.new()
+				uniformBuffer.uniform_type = RenderingDevice.UNIFORM_TYPE_UNIFORM_BUFFER
+				uniformBuffer.binding = 1
+				uniformBuffer.add_id(uniform_buffer)
+				var uniform_set = UniformSetCacheRD.get_cache(horizontalBlurShader, 0, [currentFrame, uniformBuffer])
 				
 				var compute_list := rd.compute_list_begin()
 				rd.compute_list_bind_compute_pipeline(compute_list, horizontalPipeline)
@@ -84,3 +83,5 @@ func _render_callback(p_effect_callback_type, p_render_data):
 				rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
 				rd.compute_list_dispatch(compute_list, x_groups, y_groups, z_groups)
 				rd.compute_list_end()
+
+				rd.free_rid(uniform_buffer)
