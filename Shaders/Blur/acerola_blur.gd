@@ -21,6 +21,8 @@ func _init():
 	verticalBlurShader = AcerolaShaderCompiler.get_compute_kernel_compilation('blur', 1)
 	verticalPipeline = rd.compute_pipeline_create(verticalBlurShader)
 
+	var blurCompute =  ACompute.new('blur')
+
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
 		rd.free_rid(horizontalPipeline)
@@ -29,13 +31,11 @@ func _notification(what):
 func _render_callback(p_effect_callback_type, p_render_data):
 	if enabled and rd and p_effect_callback_type == EFFECT_CALLBACK_TYPE_POST_TRANSPARENT and horizontalPipeline.is_valid():
 
-		# if horizontalBlurShader != AcerolaShaderCompiler.get_shader_compilation('acerolafx_horizontal_blur'):
-		# 	horizontalBlurShader = AcerolaShaderCompiler.get_shader_compilation('acerolafx_horizontal_blur')
-		# 	horizontalPipeline = rd.compute_pipeline_create(horizontalBlurShader)
-
-		# if verticalBlurShader != AcerolaShaderCompiler.get_shader_compilation('acerolafx_vertical_blur'):
-		# 	verticalBlurShader = AcerolaShaderCompiler.get_shader_compilation('acerolafx_vertical_blur')
-		# 	verticalPipeline = rd.compute_pipeline_create(verticalBlurShader)
+		if horizontalBlurShader != AcerolaShaderCompiler.get_compute_kernel_compilation('blur', 0):
+			horizontalBlurShader = AcerolaShaderCompiler.get_compute_kernel_compilation('blur', 0)
+			horizontalPipeline = rd.compute_pipeline_create(horizontalBlurShader)
+			verticalBlurShader = AcerolaShaderCompiler.get_compute_kernel_compilation('blur', 1)
+			verticalPipeline = rd.compute_pipeline_create(verticalBlurShader)
 
 
 		var render_scene_buffers : RenderSceneBuffersRD = p_render_data.get_render_scene_buffers()

@@ -23,8 +23,8 @@ func find_files(dir_name) -> void:
 			if dir.current_is_dir():
 				find_files(dir_name + '/' + file_name)
 			else:
-				if file_name.get_extension() == 'glsl'and shader_file_regex.search(file_name):
-					shader_files.push_back(dir_name + '/' + file_name)
+				# if file_name.get_extension() == 'glsl'and shader_file_regex.search(file_name):
+				# 	shader_files.push_back(dir_name + '/' + file_name)
 
 				if file_name.get_extension() == 'acompute':
 					compute_shader_files.push_back(dir_name + '/' + file_name)
@@ -70,7 +70,10 @@ func compile_compute_shader(compute_shader_file_path) -> void:
 	print("Compiling Compute Shader: " + compute_shader_name)
 
 	var file = FileAccess.open(compute_shader_file_path, FileAccess.READ)
-	var raw_shader_code = file.get_as_text().split("\n")
+	var raw_shader_code_string = file.get_as_text()
+	shader_code_cache[compute_shader_file_path] = raw_shader_code_string
+
+	var raw_shader_code = raw_shader_code_string.split("\n")
 	
 	var kernel_names = Array()
 
@@ -100,7 +103,7 @@ func compile_compute_shader(compute_shader_file_path) -> void:
 		return
 
 	# Verify kernels exist
-	var raw_shader_code_string = "\n".join(raw_shader_code)
+	raw_shader_code_string = "\n".join(raw_shader_code)
 	for kernel_name in kernel_names:
 		if not raw_shader_code_string.contains(kernel_name):
 			push_error("Failed to compile: " + compute_shader_file_path)
@@ -203,11 +206,14 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	for shader_file in shader_files:
-		var shader_name = shader_file.split("/")[-1].split(".glsl")[0]
-		var shader_code = FileAccess.open(shader_file, FileAccess.READ).get_as_text()
-		if shader_code != shader_code_cache[shader_name]:
-			compile_shader(shader_file)
+	for compute_shader_file in compute_shader_files:
+		var shader_code = FileAccess.open(compute_shader_file, FileAccess.READ).get_as_text()
+		if shader_code != shader_code_cache[compute_shader_file]:
+			for compute_shader in compute_shader_kernel_compilations.keys():
+				for kernel in compute_shader_kernel_compilations[compute_shader]:
+					rd.free_rid(kernel)
+
+			compile_compute_shader(compute_shader_file)
 
 
 func _notification(what):
