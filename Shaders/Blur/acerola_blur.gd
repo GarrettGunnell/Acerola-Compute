@@ -59,36 +59,16 @@ func _render_callback(p_effect_callback_type, p_render_data):
 	for view in range(view_count):
 		var input_image = render_scene_buffers.get_color_layer(view)
 
-		var currentFrame : RDUniform = RDUniform.new()
-		currentFrame.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
-		currentFrame.binding = 0
-		currentFrame.add_id(input_image)
-
-		var byte_array = PackedInt32Array([kernel_size, 3, 5, 7]).to_byte_array()
+		var byte_array = PackedInt32Array([kernel_size, 0, 0, 0]).to_byte_array()
 
 		var uniform_buffer = rd.uniform_buffer_create(byte_array.size(), byte_array)
 
-		var uniformBuffer : RDUniform = RDUniform.new()
-		uniformBuffer.uniform_type = RenderingDevice.UNIFORM_TYPE_UNIFORM_BUFFER
-		uniformBuffer.binding = 1
-		uniformBuffer.add_id(uniform_buffer)
-		var uniform_set = UniformSetCacheRD.get_cache(horizontalBlurShader, 0, [currentFrame, uniformBuffer])
 		
-		blurCompute.set_uniform_set(uniform_set)
+		blurCompute.set_texture(0, input_image)
+		blurCompute.set_uniform_buffer(1, uniform_buffer)
 		blurCompute.set_push_constant(push_constant.to_byte_array())
 
 		blurCompute.dispatch(0, x_groups, y_groups, z_groups)
 		blurCompute.dispatch(1, x_groups, y_groups, z_groups)
-
-
-		# var compute_list := rd.compute_list_begin()
-		# rd.compute_list_bind_compute_pipeline(compute_list, blurCompute.get_kernel(0))
-		# rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
-		# rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
-		# rd.compute_list_dispatch(compute_list, x_groups, y_groups, z_groups)
-		# rd.compute_list_bind_compute_pipeline(compute_list, blurCompute.get_kernel(1))
-		# rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
-		# rd.compute_list_dispatch(compute_list, x_groups, y_groups, z_groups)
-		# rd.compute_list_end()
 
 		rd.free_rid(uniform_buffer)
