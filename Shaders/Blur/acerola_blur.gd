@@ -74,14 +74,21 @@ func _render_callback(p_effect_callback_type, p_render_data):
 		uniformBuffer.add_id(uniform_buffer)
 		var uniform_set = UniformSetCacheRD.get_cache(horizontalBlurShader, 0, [currentFrame, uniformBuffer])
 		
-		var compute_list := rd.compute_list_begin()
-		rd.compute_list_bind_compute_pipeline(compute_list, blurCompute.get_kernel(0))
-		rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
-		rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
-		rd.compute_list_dispatch(compute_list, x_groups, y_groups, z_groups)
-		rd.compute_list_bind_compute_pipeline(compute_list, blurCompute.get_kernel(1))
-		rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
-		rd.compute_list_dispatch(compute_list, x_groups, y_groups, z_groups)
-		rd.compute_list_end()
+		blurCompute.set_uniform_set(uniform_set)
+		blurCompute.set_push_constant(push_constant.to_byte_array())
+
+		blurCompute.dispatch(0, x_groups, y_groups, z_groups)
+		blurCompute.dispatch(1, x_groups, y_groups, z_groups)
+
+
+		# var compute_list := rd.compute_list_begin()
+		# rd.compute_list_bind_compute_pipeline(compute_list, blurCompute.get_kernel(0))
+		# rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
+		# rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
+		# rd.compute_list_dispatch(compute_list, x_groups, y_groups, z_groups)
+		# rd.compute_list_bind_compute_pipeline(compute_list, blurCompute.get_kernel(1))
+		# rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
+		# rd.compute_list_dispatch(compute_list, x_groups, y_groups, z_groups)
+		# rd.compute_list_end()
 
 		rd.free_rid(uniform_buffer)
