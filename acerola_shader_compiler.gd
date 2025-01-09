@@ -236,3 +236,6 @@ func get_shader_compilation(shader_name: String) -> RID:
 
 func get_compute_kernel_compilation(shader_name, kernel_index):
 	return compute_shader_kernel_compilations[shader_name][kernel_index]
+
+func get_compute_kernel_compilations(shader_name):
+	return compute_shader_kernel_compilations[shader_name]
