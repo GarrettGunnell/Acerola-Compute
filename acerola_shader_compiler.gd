@@ -4,7 +4,7 @@ extends Node
 var shader_file_regex = RegEx.new()
 
 var shader_files : Array = Array()
-var compute_shader_files : Array = Array()
+var compute_shader_file_paths : Array = Array()
 
 var rd : RenderingDevice
 
@@ -27,9 +27,13 @@ func find_files(dir_name) -> void:
 				# 	shader_files.push_back(dir_name + '/' + file_name)
 
 				if file_name.get_extension() == 'acompute':
-					compute_shader_files.push_back(dir_name + '/' + file_name)
+					compute_shader_file_paths.push_back(dir_name + '/' + file_name)
 			
 			file_name = dir.get_next()
+
+
+func get_shader_name(file_path: String) -> String:
+	return file_path.get_file().split(".")[0]
 
 
 func compile_shader(shader_file_path) -> void:
@@ -65,7 +69,7 @@ func compile_shader(shader_file_path) -> void:
 
 
 func compile_compute_shader(compute_shader_file_path) -> void:
-	var compute_shader_name = compute_shader_file_path.get_file().split(".")[0]
+	var compute_shader_name = get_shader_name(compute_shader_file_path)
 
 	print("Compiling Compute Shader: " + compute_shader_name)
 
@@ -184,33 +188,28 @@ func compile_compute_shader(compute_shader_file_path) -> void:
 func _init() -> void:
 	rd = RenderingServer.get_rendering_device()
 	
-	shader_file_regex.compile("acerolafx")
-	
 	find_files("res://")
-
 
 	for shader_file in shader_files:
 		compile_shader(shader_file)
 
-	# print(shader_files)
-	# print(shader_compilations)
-	print(compute_shader_files)
-
-	for compute_shader_file in compute_shader_files:
-		compile_compute_shader(compute_shader_file)
+	for file_path in compute_shader_file_paths:
+		compile_compute_shader(file_path)
 
 
 func _process(delta: float) -> void:
-	for compute_shader_file in compute_shader_files:
-		var shader_code = FileAccess.open(compute_shader_file, FileAccess.READ).get_as_text()
-		if shader_code != shader_code_cache[compute_shader_file]:
-			for compute_shader in compute_shader_kernel_compilations.keys():
-				for kernel in compute_shader_kernel_compilations[compute_shader]:
-					rd.free_rid(kernel)
+	# Compare current shader code with cached shader code and recompile if changed
+	for file_path in compute_shader_file_paths:
+		if shader_code_cache[file_path] != FileAccess.open(file_path, FileAccess.READ).get_as_text():
+			var shader_name = get_shader_name(file_path)
 
-				compute_shader_kernel_compilations[compute_shader].clear()
+			# Free existing kernels
+			for kernel in compute_shader_kernel_compilations[shader_name]:
+				rd.free_rid(kernel)
 
-			compile_compute_shader(compute_shader_file)
+			compute_shader_kernel_compilations[shader_name].clear()
+
+			compile_compute_shader(file_path)
 
 
 func _notification(what):
