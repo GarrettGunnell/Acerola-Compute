@@ -7,15 +7,11 @@ class_name BlurCompositorEffect
 
 
 var rd : RenderingDevice
-var horizontalBlurShader : RID
-
 var blurCompute : ACompute
 
 func _init():
 	effect_callback_type = EFFECT_CALLBACK_TYPE_POST_TRANSPARENT
 	rd = RenderingServer.get_rendering_device()
-	
-	horizontalBlurShader = AcerolaShaderCompiler.get_compute_kernel_compilation('blur', 0)
 
 	blurCompute = ACompute.new('blur')
 

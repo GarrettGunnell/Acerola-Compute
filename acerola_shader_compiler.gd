@@ -199,12 +199,7 @@ func _init() -> void:
 	for compute_shader_file in compute_shader_files:
 		compile_compute_shader(compute_shader_file)
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	for compute_shader_file in compute_shader_files:
 		var shader_code = FileAccess.open(compute_shader_file, FileAccess.READ).get_as_text()
@@ -212,6 +207,8 @@ func _process(delta: float) -> void:
 			for compute_shader in compute_shader_kernel_compilations.keys():
 				for kernel in compute_shader_kernel_compilations[compute_shader]:
 					rd.free_rid(kernel)
+
+				compute_shader_kernel_compilations[compute_shader].clear()
 
 			compile_compute_shader(compute_shader_file)
 
