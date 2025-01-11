@@ -7,18 +7,18 @@ class_name BlurCompositorEffect
 
 
 var rd : RenderingDevice
-var blurCompute : ACompute
+var blur_compute : ACompute
 
 func _init():
 	effect_callback_type = EFFECT_CALLBACK_TYPE_POST_TRANSPARENT
 	rd = RenderingServer.get_rendering_device()
 
-	blurCompute = ACompute.new('blur')
+	blur_compute = ACompute.new('blur')
 
 
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
-		blurCompute.free()
+		blur_compute.free()
 
 
 func _render_callback(p_effect_callback_type, p_render_data):
@@ -45,26 +45,20 @@ func _render_callback(p_effect_callback_type, p_render_data):
 	var y_groups = (size.y - 1) / 8 + 1
 	var z_groups = 1
 	
-	var push_constant : PackedFloat32Array = PackedFloat32Array()
-	push_constant.push_back(size.x)
-	push_constant.push_back(size.y)
-	push_constant.push_back(0.0)
-	push_constant.push_back(0.0)
+	var push_constant : PackedFloat32Array = PackedFloat32Array([size.x, size.y, 0.0, 0.0])
 	
-	var view_count = render_scene_buffers.get_view_count()
-	for view in range(view_count):
+	for view in range(render_scene_buffers.get_view_count()):
 		var input_image = render_scene_buffers.get_color_layer(view)
 
-		var byte_array = PackedInt32Array([kernel_size, 0, 0, 0]).to_byte_array()
+		var uniform_array = PackedInt32Array([kernel_size, 0, 0, 0]).to_byte_array()
 
-		var uniform_buffer = rd.uniform_buffer_create(byte_array.size(), byte_array)
+		var uniform_buffer = rd.uniform_buffer_create(uniform_array.size(), uniform_array)
 
-		
-		blurCompute.set_texture(0, input_image)
-		blurCompute.set_uniform_buffer(1, uniform_buffer)
-		blurCompute.set_push_constant(push_constant.to_byte_array())
+		blur_compute.set_texture(0, input_image)
+		blur_compute.set_uniform_buffer(1, uniform_buffer)
+		blur_compute.set_push_constant(push_constant.to_byte_array())
 
-		blurCompute.dispatch(0, x_groups, y_groups, z_groups)
-		blurCompute.dispatch(1, x_groups, y_groups, z_groups)
+		blur_compute.dispatch(0, x_groups, y_groups, z_groups)
+		blur_compute.dispatch(1, x_groups, y_groups, z_groups)
 
 		rd.free_rid(uniform_buffer)
