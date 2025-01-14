@@ -5,8 +5,10 @@
 /addons
 /Ignored
 /ImageEditor
+/Build
 
 icon.svg*
 project.godot
 *.tmp
 *.import
+export_presets.cfg
