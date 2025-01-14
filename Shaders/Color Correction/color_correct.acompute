@@ -1,0 +1,24 @@
+#kernel ColorCorrect
+
+
+layout(rgba16f, set = 0, binding = 0) uniform image2D colorImage;
+
+layout(binding = 1) uniform UniformBufferObject {
+	vec4 _Exposure;
+};
+
+layout(push_constant, std430) uniform Params {
+	vec2 raster_size;
+};
+
+[numthreads(8, 8, 1)]
+void ColorCorrect() {
+	ivec2 uv = ivec2(gl_GlobalInvocationID.xy);
+	ivec2 size = ivec2(raster_size);
+	
+	if (uv.x >= size.x || uv.y >= size.y) return;
+	
+    vec3 color = imageLoad(colorImage, uv).rgb * _Exposure.gba * _Exposure.r;
+	
+	imageStore(colorImage, uv, vec4(color, 1.0));
+}

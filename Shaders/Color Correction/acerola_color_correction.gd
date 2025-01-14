@@ -7,57 +7,57 @@ class_name ColorCorrectionCompositorEffect
 
 
 var rd : RenderingDevice
-var shader : RID
-var pipeline : RID
+var color_correct_compute : ACompute
 
-func _init(shader_rid):
+func _init():
 	effect_callback_type = EFFECT_CALLBACK_TYPE_POST_TRANSPARENT
 	rd = RenderingServer.get_rendering_device()
 	
-	shader = shader_rid
-	pipeline = rd.compute_pipeline_create(shader)
+	color_correct_compute = ACompute.new('color_correct')
 
 	
 func _notification(what):
 	if what == NOTIFICATION_PREDELETE:
-		rd.free_rid(pipeline)
+		color_correct_compute.free()
 
 	
 func _render_callback(p_effect_callback_type, p_render_data):
-	if enabled and rd and p_effect_callback_type == EFFECT_CALLBACK_TYPE_POST_TRANSPARENT and pipeline.is_valid():
-		var render_scene_buffers : RenderSceneBuffersRD = p_render_data.get_render_scene_buffers()
-		if render_scene_buffers:
-			var size = render_scene_buffers.get_internal_size()
-			if size.x == 0 and size.y == 0:
-				return
-				
-			var x_groups = (size.x - 1) / 8 + 1
-			var y_groups = (size.y - 1) / 8 + 1
-			var z_groups = 1
-			
-			var push_constant : PackedFloat32Array = PackedFloat32Array()
-			push_constant.push_back(size.x)
-			push_constant.push_back(size.y)
-			push_constant.push_back(0.0)
-			push_constant.push_back(0.0)
-			push_constant.push_back(exposure.x)
-			push_constant.push_back(exposure.y)
-			push_constant.push_back(exposure.z)
-			push_constant.push_back(exposure.w)
-			
-			var view_count = render_scene_buffers.get_view_count()
-			for view in range(view_count):
-				var input_image = render_scene_buffers.get_color_layer(view)
-				
-				var uniform : RDUniform = RDUniform.new()
-				uniform.uniform_type = RenderingDevice.UNIFORM_TYPE_IMAGE
-				uniform.binding = 0
-				uniform.add_id(input_image)
-				var uniform_set = UniformSetCacheRD.get_cache(shader, 0, [uniform])
-				
-				var compute_list := rd.compute_list_begin()
-				rd.compute_list_bind_compute_pipeline(compute_list, pipeline)
-				rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
-				rd.compute_list_set_push_constant(compute_list, push_constant.to_byte_array(), push_constant.size() * 4)
-				rd.compute_list_dispatch(compute_list, x_groups, y_groups, z_groups)
-				rd.compute_list_end()
+	if not enabled: return
+	if p_effect_callback_type != EFFECT_CALLBACK_TYPE_POST_TRANSPARENT: return
+	
+	if not rd:
+		push_error("No rendering device")
+		return
+	
+	var render_scene_buffers : RenderSceneBuffersRD = p_render_data.get_render_scene_buffers()
+
+	if not render_scene_buffers:
+		push_error("No buffer to render to")
+		return
+
+	
+	var size = render_scene_buffers.get_internal_size()
+	if size.x == 0 and size.y == 0:
+		push_error("Rendering to 0x0 buffer")
+		return
+	
+	var x_groups = (size.x - 1) / 8 + 1
+	var y_groups = (size.y - 1) / 8 + 1
+	var z_groups = 1
+	
+	var push_constant : PackedFloat32Array = PackedFloat32Array([size.x, size.y, 0.0, 0.0])
+	
+	for view in range(render_scene_buffers.get_view_count()):
+		var input_image = render_scene_buffers.get_color_layer(view)
+
+		var uniform_array = PackedFloat32Array([exposure.x, exposure.y, exposure.z, exposure.w]).to_byte_array()
+
+		var uniform_buffer = rd.uniform_buffer_create(uniform_array.size(), uniform_array)
+
+		color_correct_compute.set_texture(0, input_image)
+		color_correct_compute.set_uniform_buffer(1, uniform_buffer)
+		color_correct_compute.set_push_constant(push_constant.to_byte_array())
+
+		color_correct_compute.dispatch(0, x_groups, y_groups, z_groups)
+
+		rd.free_rid(uniform_buffer)
