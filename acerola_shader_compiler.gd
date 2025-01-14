@@ -120,7 +120,7 @@ func compile_compute_shader(compute_shader_file_path) -> void:
 		var line = raw_shader_code[i]
 
 		for kernel_name in kernel_names:
-			if line.contains(kernel_name):
+			if line.contains(kernel_name) and line.contains('void'):
 				# print("Found kernel " + kernel_name  + " at line " + str(i + kernel_names.size() + 1))
 
 				# find thread group count by searching previous line of code from kernel function
