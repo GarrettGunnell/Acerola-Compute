@@ -12,6 +12,8 @@ var uniform_set_gpu_id : RID
 var uniform_set_cache : Array
 var current_bound_uniform_set_cpu_copy : Array
 
+var refresh_uniforms = true
+
 # Contains the contents of the uniform array itself
 var uniform_buffer_cache = {}
 # Contains the RIDs for the gpu versions of the uniform array
@@ -33,13 +35,14 @@ func set_texture(binding: int, texture: RID) -> void:
 
 	cache_uniform(u)
 
+
 func set_uniform_buffer(binding: int, uniform_array: PackedByteArray) -> void:
 	# Check if buffer exists already and hasn't changed
 	if uniform_buffer_cache.has(binding):
 		if uniform_array == uniform_buffer_cache.get(binding):
 			return
 
-	# Check if buffer exists in gpu memory and release
+	# Check if buffer exists in gpu memory and release if so
 	if uniform_buffer_id_cache.has(binding):
 		rd.free_rid(uniform_buffer_id_cache.get(binding))
 
@@ -59,7 +62,22 @@ func set_uniform_buffer(binding: int, uniform_array: PackedByteArray) -> void:
 
 func cache_uniform(u: RDUniform) -> void:
 	if uniform_set_cache.size() - 1 < u.binding:
+		refresh_uniforms = true
 		uniform_set_cache.resize(u.binding + 1)
+
+	# If uniform has had its info changed then set flag to refresh gpu side uniform data
+	if uniform_set_cache[u.binding]:
+		var old_uniform_ids = uniform_set_cache[u.binding].get_ids()
+		var new_uniform_ids = u.get_ids()
+		
+		if old_uniform_ids.size() != new_uniform_ids.size(): 
+			refresh_uniforms = true
+		else:
+			for i in old_uniform_ids.size():
+				if old_uniform_ids[i].get_id() != new_uniform_ids[i].get_id():
+					refresh_uniforms = true
+					break
+
 
 	uniform_set_cache[u.binding] = u
 
@@ -88,14 +106,14 @@ func dispatch(kernel_index: int, x_groups: int, y_groups: int, z_groups: int) ->
 			kernels.push_back(rd.compute_pipeline_create(kernel))
 
 	# Reallocate GPU memory if uniforms need updating
-	if uniform_set_cache != current_bound_uniform_set_cpu_copy:
-		print("Uniforms changed")
+	if refresh_uniforms:
+		if uniform_set_gpu_id.is_valid(): rd.free_rid(uniform_set_gpu_id)
+		uniform_set_gpu_id = rd.uniform_set_create(uniform_set_cache, global_shader_id, 0)
+		refresh_uniforms = false
 	
-	var uniform_set = UniformSetCacheRD.get_cache(shader_id, 0, uniform_set_cache)
-
 	var compute_list := rd.compute_list_begin()
 	rd.compute_list_bind_compute_pipeline(compute_list, kernels[kernel_index])
-	rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
+	rd.compute_list_bind_uniform_set(compute_list, uniform_set_gpu_id, 0)
 	rd.compute_list_set_push_constant(compute_list, push_constant, push_constant.size())
 	rd.compute_list_dispatch(compute_list, x_groups, y_groups, z_groups)
 	rd.compute_list_end()
@@ -107,3 +125,5 @@ func free() -> void:
 
 	for binding in uniform_buffer_id_cache.keys():
 		rd.free_rid(uniform_buffer_id_cache[binding])
+
+	if uniform_set_gpu_id.is_valid(): rd.free_rid(uniform_set_gpu_id)
