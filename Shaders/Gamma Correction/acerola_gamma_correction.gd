@@ -51,12 +51,8 @@ func _render_callback(p_effect_callback_type, p_render_data):
 
 		var uniform_array = PackedFloat32Array([gamma, 0, 0, 0]).to_byte_array()
 
-		var uniform_buffer = rd.uniform_buffer_create(uniform_array.size(), uniform_array)
-
 		gamma_compute.set_texture(0, input_image)
-		gamma_compute.set_uniform_buffer(1, uniform_buffer)
+		gamma_compute.set_uniform_buffer(1, uniform_array)
 		gamma_compute.set_push_constant(push_constant.to_byte_array())
 
 		gamma_compute.dispatch(0, x_groups, y_groups, z_groups)
-
-		rd.free_rid(uniform_buffer)

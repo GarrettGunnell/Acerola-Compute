@@ -52,13 +52,9 @@ func _render_callback(p_effect_callback_type, p_render_data):
 
 		var uniform_array = PackedInt32Array([kernel_size, 0, 0, 0]).to_byte_array()
 
-		var uniform_buffer = rd.uniform_buffer_create(uniform_array.size(), uniform_array)
-
 		blur_compute.set_texture(0, input_image)
-		blur_compute.set_uniform_buffer(1, uniform_buffer)
+		blur_compute.set_uniform_buffer(1, uniform_array)
 		blur_compute.set_push_constant(push_constant.to_byte_array())
 
 		blur_compute.dispatch(0, x_groups, y_groups, z_groups)
 		blur_compute.dispatch(1, x_groups, y_groups, z_groups)
-
-		rd.free_rid(uniform_buffer)

@@ -172,7 +172,7 @@ func compile_compute_shader(compute_shader_file_path) -> void:
 			push_error("In: " + shader_code_string)
 			return
 			
-		print("Compiling Kernel: " + kernel_name)
+		print("- Compiling Kernel: " + kernel_name)
 		shader_compilation = rd.shader_create_from_spirv(shader_spirv)
 
 		if not shader_compilation.is_valid():
