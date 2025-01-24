@@ -112,12 +112,8 @@ func dispatch(kernel_index: int, x_groups: int, y_groups: int, z_groups: int) ->
 		refresh_uniforms = false
 	
 	var compute_list := rd.compute_list_begin()
-	rd.compute_list_bind_compute_pipeline(compute_list, kernels[0])
+	rd.compute_list_bind_compute_pipeline(compute_list, kernels[kernel_index])
 	rd.compute_list_bind_uniform_set(compute_list, uniform_set_gpu_id, 0)
-	rd.compute_list_set_push_constant(compute_list, push_constant, push_constant.size())
-	rd.compute_list_dispatch(compute_list, x_groups, y_groups, z_groups)
-	rd.compute_list_add_barrier(compute_list)
-	rd.compute_list_bind_compute_pipeline(compute_list, kernels[1])
 	rd.compute_list_set_push_constant(compute_list, push_constant, push_constant.size())
 	rd.compute_list_dispatch(compute_list, x_groups, y_groups, z_groups)
 	rd.compute_list_end()
