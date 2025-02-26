@@ -1,0 +1,24 @@
+#kernel ExposureExample
+
+
+layout(rgba16f, set = 0, binding = 0) uniform image2D _RenderTarget;
+
+layout(binding = 1) uniform UniformBufferObject {
+	vec4 _Exposure;
+};
+
+layout(push_constant, std430) uniform Params {
+	vec2 raster_size;
+};
+
+[numthreads(8, 8, 1)]
+void ExposureExample() {
+	ivec2 uv = ivec2(gl_GlobalInvocationID.xy);
+	ivec2 size = ivec2(raster_size);
+	
+	if (uv.x >= size.x || uv.y >= size.y) return;
+	
+    vec3 color = imageLoad(_RenderTarget, uv).rgb * _Exposure.gba * _Exposure.r;
+	
+	imageStore(_RenderTarget, uv, vec4(color, 1.0));
+}
