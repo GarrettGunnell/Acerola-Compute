@@ -42,22 +42,22 @@ func set_uniform_buffer(binding: int, uniform_array: PackedByteArray) -> void:
 		if uniform_array == uniform_buffer_cache.get(binding):
 			return
 
-	# Check if buffer exists in gpu memory and release if so
+	# Check if buffer exists in gpu memory and update it if so
 	if uniform_buffer_id_cache.has(binding):
-		rd.free_rid(uniform_buffer_id_cache.get(binding))
-
-	var uniform_buffer_id = rd.uniform_buffer_create(uniform_array.size(), uniform_array)
-	
-	var u : RDUniform = RDUniform.new()
-	u.uniform_type = RenderingDevice.UNIFORM_TYPE_UNIFORM_BUFFER
-	u.binding = binding
-	u.add_id(uniform_buffer_id)
-
-	# Cache array contents and RID
-	uniform_buffer_cache[binding] = PackedByteArray(uniform_array)
-	uniform_buffer_id_cache[binding] = uniform_buffer_id
-
-	cache_uniform(u)
+		rd.buffer_update(uniform_buffer_id_cache.get(binding), 0, uniform_array.size(), uniform_array)
+		# Recache array contents
+		uniform_buffer_cache[binding] = PackedByteArray(uniform_array)
+		print("Uniform binding ", str(binding), " updated for ", shader_name)
+	else:
+		var uniform_buffer_id = rd.uniform_buffer_create(uniform_array.size(), uniform_array)
+		var u : RDUniform = RDUniform.new()
+		u.uniform_type = RenderingDevice.UNIFORM_TYPE_UNIFORM_BUFFER
+		u.binding = binding
+		u.add_id(uniform_buffer_id)
+		# Cache array contents and RID
+		uniform_buffer_cache[binding] = PackedByteArray(uniform_array)
+		uniform_buffer_id_cache[binding] = uniform_buffer_id
+		cache_uniform(u)
 
 
 func cache_uniform(u: RDUniform) -> void:
