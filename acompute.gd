@@ -15,8 +15,10 @@ var current_bound_uniform_set_cpu_copy : Array
 var refresh_uniforms = true
 
 # Contains the contents of the uniform array itself
+# Binding -> Array
 var uniform_buffer_cache = {}
 # Contains the RIDs for the gpu versions of the uniform array
+# Binding -> RID
 var uniform_buffer_id_cache = {}
 
 func get_kernel(index: int) -> RID:
@@ -37,18 +39,27 @@ func set_texture(binding: int, texture: RID) -> void:
 
 
 func set_uniform_buffer(binding: int, uniform_array: PackedByteArray) -> void:
-	# Check if buffer exists already and hasn't changed
+	# Check if buffer exists already in this binding
 	if uniform_buffer_cache.has(binding):
+
+		# if buffer is identical, no need to change
 		if uniform_array == uniform_buffer_cache.get(binding):
 			return
 
-	# Check if buffer exists in gpu memory and release if so
-	if uniform_buffer_id_cache.has(binding):
+		# if new values but same buffer size, update gpu buffer
+		if uniform_array.size() == uniform_buffer_cache[binding].size():
+			rd.buffer_update(uniform_buffer_id_cache.get(binding), 0, uniform_array.size(), uniform_array)
+			uniform_buffer_cache[binding] = PackedByteArray(uniform_array)
+			return
+
+		# Otherwise, free the memory because footprint no longer matches
 		rd.free_rid(uniform_buffer_id_cache.get(binding))
 
+	# Instantiate uniform buffer in gpu memory and declare uniform descriptor
 	var uniform_buffer_id = rd.uniform_buffer_create(uniform_array.size(), uniform_array)
 	
 	var u : RDUniform = RDUniform.new()
+
 	u.uniform_type = RenderingDevice.UNIFORM_TYPE_UNIFORM_BUFFER
 	u.binding = binding
 	u.add_id(uniform_buffer_id)
