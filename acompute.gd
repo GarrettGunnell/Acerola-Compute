@@ -112,6 +112,10 @@ func dispatch(kernel_index: int, x_groups: int, y_groups: int, z_groups: int) ->
 	# Recreate kernel pipelines if shader was recompiled
 	if shader_id != global_shader_id:
 		shader_id = global_shader_id
+
+		# AcerolaShaderCompiler frees the compilations which then frees all attached resources including the old uniform set so it needs to be recreated
+		uniform_set_gpu_id = rd.uniform_set_create(uniform_set_cache, global_shader_id, 0)
+
 		kernels.clear()
 		for kernel in AcerolaShaderCompiler.get_compute_kernel_compilations(shader_name):
 			kernels.push_back(rd.compute_pipeline_create(kernel))
