@@ -9,7 +9,7 @@ var compute_shader_file_paths : Array = Array()
 var rd : RenderingDevice
 
 var shader_compilations = {}
-var shader_code_cache = {}
+var shader_compilation_time = {}
 
 var compute_shader_kernel_compilations = {}
 
@@ -45,7 +45,6 @@ func compile_shader(shader_file_path) -> void:
 			rd.free_rid(shader_compilations[shader_name])
 	
 	var shader_code = FileAccess.open(shader_file_path, FileAccess.READ).get_as_text()
-	shader_code_cache[shader_name] = shader_code
 
 	var shader_compilation = RID()
 
@@ -66,6 +65,7 @@ func compile_shader(shader_file_path) -> void:
 		return
 
 	shader_compilations[shader_name] = shader_compilation
+	shader_compilation_time[shader_file_path] = FileAccess.get_modified_time(shader_file_path)
 
 
 func compile_compute_shader(compute_shader_file_path) -> void:
@@ -75,7 +75,7 @@ func compile_compute_shader(compute_shader_file_path) -> void:
 
 	var file = FileAccess.open(compute_shader_file_path, FileAccess.READ)
 	var raw_shader_code_string = file.get_as_text()
-	shader_code_cache[compute_shader_file_path] = raw_shader_code_string
+	shader_compilation_time[compute_shader_file_path] = FileAccess.get_modified_time(compute_shader_file_path)
 
 	var raw_shader_code = raw_shader_code_string.split("\n")
 	
@@ -200,7 +200,7 @@ func _init() -> void:
 func _process(delta: float) -> void:
 	# Compare current shader code with cached shader code and recompile if changed
 	for file_path in compute_shader_file_paths:
-		if shader_code_cache[file_path] != FileAccess.open(file_path, FileAccess.READ).get_as_text():
+		if shader_compilation_time[file_path] != FileAccess.get_modified_time(file_path):
 			var shader_name = get_shader_name(file_path)
 
 			# Free existing kernels
