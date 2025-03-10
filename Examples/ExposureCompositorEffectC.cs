@@ -3,28 +3,23 @@ using System.Runtime.InteropServices;
 
 [GlobalClass]
 [Tool]
-public partial class ExposureShader : CompositorEffect
+public partial class ExposureCompositorEffectC : CompositorEffect
 {
 
+  [ExportGroup("Shader Settings")]
   [Export]
   private Vector4 m_exposure = new(2, 1, 1, 1);
 
-  private Shader m_exposureShader;
+  private AComputeC m_newShader;
 
   /// <summary>
   /// Example compositor effect using the C# shader wrapper.
   /// </summary>
-  public ExposureShader() : base()
+  public ExposureCompositorEffectC() : base()
   {
     RenderingServer.CallOnRenderThread(Callable.From(() =>
     {
-
-      // It is possible to just include a resource path to a glsl compute shader
-      // this.m_exposureShader = new("res://exposure_example.glsl");
-      // this.m_exposureShader = new("res://exposure_example.glsl", false);
-
-      // Create a shader wrapper for a custom shader
-      this.m_exposureShader = new("exposure_example", true);
+      this.m_newShader = new AComputeC("exposure_example");
     }));
   }
 
@@ -51,17 +46,17 @@ public partial class ExposureShader : CompositorEffect
 
     Rid inputImage = renderSceneBuffers.GetColorLayer(0);
 
-    this.m_exposureShader.SetPushConstant(ref pushConstant);
-    this.m_exposureShader.SetTexture(0, inputImage);
-    this.m_exposureShader.SetUniformBuffer(1, ref uniformArray);
-    this.m_exposureShader.Dispatch(xGroups, yGroups, zGroups);
+    this.m_newShader.SetPushConstant(ref pushConstant);
+    this.m_newShader.SetTexture(0, inputImage);
+    this.m_newShader.SetUniformBuffer(1, ref uniformArray);
+    this.m_newShader.Dispatch(0, xGroups, yGroups, zGroups);
   }
 
   public override void _Notification(int what)
   {
     if (what == NotificationPredelete)
     {
-      this.m_exposureShader.Free();
+      this.m_newShader.Free();
     }
   }
 
